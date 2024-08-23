@@ -1,11 +1,17 @@
 import { auth } from "@service";
 import { useState } from "react";
+import { saveToken } from "@token-service";
+
 const Index = () => {
   const [phone_number, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const save = () => {
+
+  const save = async () => {
     const payload = { phone_number, password };
-    auth.sign_in(payload);
+    const response: any = await auth.sign_in(payload);
+    if (response?.status === 201) {
+      saveToken("access_token", response?.data?.data?.tokens.access_token);
+    }
   };
 
   return (
