@@ -1,6 +1,6 @@
 interface SignIn {
   phone_number: string | number;
-  passsword: string | number;
+  password: string | number;
 }
 
 export interface Auth {

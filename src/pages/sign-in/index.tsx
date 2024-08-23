@@ -3,8 +3,8 @@ import { useState } from "react";
 const Index = () => {
   const [phone_number, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const payload = { phone_number, password };
   const save = () => {
+    const payload = { phone_number, password };
     auth.sign_in(payload);
   };
 
