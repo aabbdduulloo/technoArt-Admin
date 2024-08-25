@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Form, Input, Button } from "antd";
 import LeftImg from "../../assets/login-bg-CeJ_7tXc.svg"; // Rasm manzilingizni to'g'ri ko'rsating
