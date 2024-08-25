@@ -1,125 +1,139 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
+import { Form, Input, Button } from "antd";
+import LeftImg from "../../assets/login-bg-CeJ_7tXc.svg"; // Rasm manzilingizni to'g'ri ko'rsating
 import { auth } from "@service";
-import { useState } from "react";
 import { saveToken } from "@token-service";
-import Logo from "../../assets/login-bg-CeJ_7tXc.svg";
+import { useNavigate } from "react-router-dom";
+import Notification from "@notification";
+import type { FormProps } from "antd";
 
-const Index = () => {
-  const [phone_number, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+type FieldType = {
+  phone_number?: string;
+  password?: string;
+};
 
-  const save = async () => {
-    const payload = { phone_number, password };
-    const response: any = await auth.sign_in(payload);
-    if (response?.status === 201) {
-      saveToken("access_token", response?.data?.data?.tokens.access_token);
+const baseStyle: React.CSSProperties = {
+  width: "100%",
+  height: 900,
+};
+
+const Index: React.FC = () => {
+  const navigate = useNavigate();
+  const [value] = React.useState<string>("vertical");
+
+  const onFinish: FormProps<FieldType>["onFinish"] = async values => {
+    try {
+      const response: any = await auth.sign_in(values);
+
+      if (response && response.status === 201) {
+        Notification("success", "Success", "You have successfully signed in.");
+        const data = response.data?.data;
+        if (data && data.tokens && data.tokens.access_token) {
+          const {
+            tokens: { access_token },
+          } = data;
+          saveToken("access_token", access_token);
+          navigate("/main");
+        } else {
+          console.error(
+            "Tokens yoki access_token javob ma'lumotlarida mavjud emas."
+          );
+        }
+      } else {
+        console.error(`Kutilmagan javob holati: ${response?.status}`);
+      }
+    } catch (error) {
+      console.error("Kirish jarayonida xato:", error);
+      Notification("error", "Error", "There was an error during sign-in.");
     }
   };
 
-  return (
-    <div style={styles.container}>
-      <div style={styles.imageContainer}>
-        <img src={Logo} alt="Login Illustration" style={styles.image} />
-      </div>
+  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = errorInfo => {
+    console.log("Muvaffaqiyatsizlik:", errorInfo);
+  };
 
-      <div style={styles.formContainer}>
-        <h2 style={styles.title}>Login</h2>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>* Phone number</label>
-          <input
-            type="text"
-            onChange={e => setPhone(e.target.value)}
-            placeholder="Phone number"
-            style={styles.input}
-          />
+  return (
+    <div style={{ display: "flex", height: "100vh" }}>
+      {/* Chap tomondagi rasm */}
+      <div
+        style={{
+          width: "50%",
+          height: "100%",
+          backgroundImage: `url(${LeftImg})`,
+          backgroundSize: "50%", // Rasmni kichraytirish
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat", // Rasmni takrorlamaslik uchun
+          backgroundColor: "#1677ff10",
+        }}
+      ></div>
+
+      {/* O'ng tomondagi kontent */}
+      <div style={{ width: "50%", padding: "20px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: value === "vertical" ? "column" : "row",
+            height: "calc(100% - 40px)", // O'lchamlarni moslashtiring
+            overflow: "auto",
+          }}
+        >
+          <div
+            style={{
+              ...baseStyle,
+              backgroundColor: "#fff", // Rangni o'zgartiring
+              flex: 1,
+            }}
+          >
+            <h1 className="mb-6 text-2xl font-bold">Login</h1>
+            <Form
+              name="basic"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              style={{ maxWidth: 400 }}
+              initialValues={{ remember: true }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+              layout="vertical"
+            >
+              <Form.Item
+                label="Phone Number"
+                name="phone_number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Iltimos, telefon raqamingizni kiriting!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Iltimos, parolingizni kiriting!",
+                  },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
+
+              <Form.Item>
+                <Button type="primary" htmlType="submit" className="w-full">
+                  Login
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
         </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>* Password</label>
-          <input
-            type="password"
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Password"
-            style={styles.input}
-          />
-        </div>
-        <button onClick={save} style={styles.button}>
-          Login
-        </button>
-        <p style={styles.registerText}>
-          Don’t you have an account? <a href="#">Register</a>
-        </p>
       </div>
     </div>
   );
-};
-
-// CSS styles
-const styles = {
-  container: {
-    display: "flex",
-    height: "100vh",
-    alignItems: "center",
-    backgroundColor: "#f5f7fa",
-  },
-  imageContainer: {
-    flex: 0.5,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#e9eef7",
-    padding: "10px",
-  },
-  image: {
-    maxWidth: "100%",
-    maxHeight: "100%",
-    objectFit: "contain",
-  },
-  formContainer: {
-    flex: 0.5,
-    padding: "40px",
-    backgroundColor: "#ffffff",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    borderRadius: "8px",
-    maxWidth: "400px",
-    margin: "auto",
-  },
-  title: {
-    marginBottom: "20px",
-    fontSize: "24px",
-    fontWeight: "bold",
-    color: "#333333",
-  },
-  inputGroup: {
-    marginBottom: "15px",
-  },
-  label: {
-    display: "block",
-    marginBottom: "5px",
-    fontSize: "14px",
-    color: "#666666",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    border: "1px solid #cccccc",
-    borderRadius: "4px",
-    fontSize: "14px",
-  },
-  button: {
-    width: "100%",
-    padding: "10px",
-    backgroundColor: "#d35400",
-    color: "#ffffff",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "16px",
-    marginBottom: "20px",
-  },
-  registerText: {
-    textAlign: "center",
-    fontSize: "14px",
-    color: "#333333",
-  },
 };
 
 export default Index;

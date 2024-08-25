@@ -9,7 +9,8 @@
       "@pages": ["./src/pages"],
       "@service": ["./src/service"],
       "@types": ["./src/types"],
-      "@token-service": ["./src/utils/token-service"]
+      "@token-service": ["./src/utils/token-service"],
+      "@notification": ["./src/utils/notification"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

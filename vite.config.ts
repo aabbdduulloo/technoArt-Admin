@@ -11,6 +11,7 @@ export default defineConfig({
       { find: "@service", replacement: "/src/service" },
       { find: "@types", replacement: "/src/types" },
       { find: "@token-service", replacement: "/src/utils/token-service" },
+      { find: "@notification", replacement: "/src/utils/notification" },
     ],
   },
 });
