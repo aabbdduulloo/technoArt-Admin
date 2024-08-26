@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-import LeftImg from "../../assets/login-bg-CeJ_7tXc.svg"; // Rasm manzilingizni to'g'ri ko'rsating
+import LeftImg from "../../assets/login-bg-CeJ_7tXc.svg";
 import { auth } from "@service";
 import { saveToken } from "@token-service";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +8,8 @@ import Notification from "@notification";
 import type { FormProps } from "antd";
 
 type FieldType = {
-  phone_number?: string;
-  password?: string;
+  phone_number: string | number;
+  password: string;
 };
 
 const baseStyle: React.CSSProperties = {
@@ -17,14 +17,13 @@ const baseStyle: React.CSSProperties = {
   height: 900,
 };
 
-const Index: React.FC = () => {
+const Index = () => {
   const navigate = useNavigate();
   const [value] = React.useState<string>("vertical");
 
   const onFinish: FormProps<FieldType>["onFinish"] = async values => {
     try {
       const response: any = await auth.sign_in(values);
-
       if (response && response.status === 201) {
         Notification("success", "Success", "You have successfully signed in.");
         const data = response.data?.data;
@@ -60,9 +59,9 @@ const Index: React.FC = () => {
           width: "50%",
           height: "100%",
           backgroundImage: `url(${LeftImg})`,
-          backgroundSize: "50%", // Rasmni kichraytirish
+          backgroundSize: "50%",
           backgroundPosition: "center",
-          backgroundRepeat: "no-repeat", // Rasmni takrorlamaslik uchun
+          backgroundRepeat: "no-repeat",
           backgroundColor: "#1677ff10",
         }}
       ></div>
@@ -73,14 +72,14 @@ const Index: React.FC = () => {
           style={{
             display: "flex",
             flexDirection: value === "vertical" ? "column" : "row",
-            height: "calc(100% - 40px)", // O'lchamlarni moslashtiring
+            height: "calc(100% - 40px)",
             overflow: "auto",
           }}
         >
           <div
             style={{
               ...baseStyle,
-              backgroundColor: "#fff", // Rangni o'zgartiring
+              backgroundColor: "#fff",
               flex: 1,
             }}
           >
