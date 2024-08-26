@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Button, Layout, theme } from "antd";
+import { Button, Layout, theme, Menu } from "antd";
 import { NavLink, Outlet } from "react-router-dom";
 import routes from "../../router/routes";
+import MainLogo from "../../assets/main-logo.svg";
 
 const { Header, Sider, Content } = Layout;
 
@@ -20,13 +21,30 @@ const Index = () => {
         collapsed={collapsed}
         style={{ height: "100vh" }}
       >
-        {routes.map((item, index) => {
-          return (
-            <div key={index}>
-              <NavLink to={item.path}>{item.title}</NavLink>
-            </div>
-          );
-        })}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "16px",
+          }}
+        >
+          <img src={MainLogo} alt="Main Logo" style={{}} />
+          <span style={{ fontSize: "20px", color: "#fff", margin: "9px" }}>
+            TechnoArk
+          </span>
+        </div>
+
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={["1"]}
+          items={routes.map((item, index) => ({
+            key: index,
+            icon: item.icon,
+            label: <NavLink to={item.path}>{item.title}</NavLink>,
+          }))}
+        />
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>

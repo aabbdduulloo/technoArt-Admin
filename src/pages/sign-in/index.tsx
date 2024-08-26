@@ -1,4 +1,3 @@
-import React from "react";
 import { Form, Input, Button } from "antd";
 import LeftImg from "../../assets/login-bg-CeJ_7tXc.svg";
 import { auth } from "@service";
@@ -12,14 +11,8 @@ type FieldType = {
   password: string;
 };
 
-const baseStyle: React.CSSProperties = {
-  width: "100%",
-  height: 900,
-};
-
 const Index = () => {
   const navigate = useNavigate();
-  const [value] = React.useState<string>("vertical");
 
   const onFinish: FormProps<FieldType>["onFinish"] = async values => {
     try {
@@ -52,7 +45,9 @@ const Index = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div
+      style={{ display: "flex", height: "100vh", backgroundColor: "#F8F9FD" }}
+    >
       {/* Chap tomondagi rasm */}
       <div
         style={{
@@ -62,72 +57,85 @@ const Index = () => {
           backgroundSize: "50%",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          backgroundColor: "#1677ff10",
+          backgroundColor: "#E3E7FF",
         }}
       ></div>
 
       {/* O'ng tomondagi kontent */}
-      <div style={{ width: "50%", padding: "20px" }}>
+      <div
+        style={{
+          width: "50%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <div
           style={{
-            display: "flex",
-            flexDirection: value === "vertical" ? "column" : "row",
-            height: "calc(100% - 40px)",
-            overflow: "auto",
+            width: "400px",
+            backgroundColor: "#fff",
+            padding: "40px",
+            borderRadius: "8px",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div
-            style={{
-              ...baseStyle,
-              backgroundColor: "#fff",
-              flex: 1,
-            }}
+          <h1
+            className="mb-6 text-2xl font-bold"
+            style={{ textAlign: "center", fontSize: "24px" }}
           >
-            <h1 className="mb-6 text-2xl font-bold">Login</h1>
-            <Form
-              name="basic"
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 16 }}
-              style={{ maxWidth: 400 }}
-              initialValues={{ remember: true }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-              layout="vertical"
+            Login
+          </h1>
+          <Form
+            name="basic"
+            layout="vertical"
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="Phone Number"
+              name="phone_number"
+              rules={[
+                {
+                  required: true,
+                  message: "Iltimos, telefon raqamingizni kiriting!",
+                },
+              ]}
             >
-              <Form.Item
-                label="Phone Number"
-                name="phone_number"
-                rules={[
-                  {
-                    required: true,
-                    message: "Iltimos, telefon raqamingizni kiriting!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
+              <Input />
+            </Form.Item>
 
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Iltimos, parolingizni kiriting!",
-                  },
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Iltimos, parolingizni kiriting!",
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
 
-              <Form.Item>
-                <Button type="primary" htmlType="submit" className="w-full">
-                  Login
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full"
+                style={{ backgroundColor: "#FF5722", borderColor: "#FF5722" }}
+              >
+                Login
+              </Button>
+            </Form.Item>
+
+            <div style={{ textAlign: "center" }}>
+              <span>
+                Don’t you have an account? <a href="/register">Registrate</a>
+              </span>
+            </div>
+          </Form>
         </div>
       </div>
     </div>
