@@ -10,7 +10,8 @@
       "@service": ["./src/service"],
       "@types": ["./src/types"],
       "@token-service": ["./src/utils/token-service"],
-      "@notification": ["./src/utils/notification"]
+      "@notification": ["./src/utils/notification"],
+      "@components": ["./src/components"]
     },
     /* Bundler mode */
     "moduleResolution": "bundler",

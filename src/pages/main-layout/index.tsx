@@ -1,17 +1,33 @@
 import { useState } from "react";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Button, Layout, theme, Menu } from "antd";
-import { NavLink, Outlet } from "react-router-dom";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
+import { Button, Layout, theme, Menu, Modal } from "antd";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import routes from "../../router/routes";
 import MainLogo from "../../assets/main-logo.svg";
 
 const { Header, Sider, Content } = Layout;
 
-const Index = () => {
+const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Modal.confirm({
+      title: "Do you want to logout?",
+      icon: <LogoutOutlined />,
+      content: "Your session will be closed.",
+      onOk() {
+        navigate("/");
+      },
+    });
+  };
 
   return (
     <Layout>
@@ -47,7 +63,15 @@ const Index = () => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header
+          style={{
+            padding: 0,
+            background: colorBgContainer,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -58,6 +82,14 @@ const Index = () => {
               height: 64,
             }}
           />
+          <Button
+            type="text"
+            icon={<LogoutOutlined />}
+            onClick={handleLogout}
+            style={{ marginRight: "16px" }}
+          >
+            Logout
+          </Button>
         </Header>
         <Content
           style={{
@@ -75,4 +107,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default MainLayout;

@@ -1,10 +1,13 @@
-import { Form, Input, Button } from "antd";
+import { useState } from "react";
+import { Form, Input, Spin } from "antd";
 import LeftImg from "../../assets/login-bg-CeJ_7tXc.svg";
 import { auth } from "@service";
 import { saveToken } from "@token-service";
 import { useNavigate } from "react-router-dom";
 import Notification from "@notification";
 import type { FormProps } from "antd";
+import { HappyProvider } from "@ant-design/happy-work-theme";
+import { Button, Space } from "antd";
 
 type FieldType = {
   phone_number: string | number;
@@ -13,8 +16,10 @@ type FieldType = {
 
 const Index = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onFinish: FormProps<FieldType>["onFinish"] = async values => {
+    setLoading(true);
     try {
       const response: any = await auth.sign_in(values);
       if (response && response.status === 201) {
@@ -26,10 +31,6 @@ const Index = () => {
           } = data;
           saveToken("access_token", access_token);
           navigate("/main");
-        } else {
-          console.error(
-            "Tokens yoki access_token javob ma'lumotlarida mavjud emas."
-          );
         }
       } else {
         console.error(`Kutilmagan javob holati: ${response?.status}`);
@@ -37,6 +38,8 @@ const Index = () => {
     } catch (error) {
       console.error("Kirish jarayonida xato:", error);
       Notification("error", "Error", "There was an error during sign-in.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,7 +75,7 @@ const Index = () => {
       >
         <div
           style={{
-            width: "400px",
+            width: "500px",
             backgroundColor: "#fff",
             padding: "40px",
             borderRadius: "8px",
@@ -81,7 +84,7 @@ const Index = () => {
         >
           <h1
             className="mb-6 text-2xl font-bold"
-            style={{ textAlign: "center", fontSize: "24px" }}
+            style={{ textAlign: "center", fontSize: "34px" }}
           >
             Login
           </h1>
@@ -120,14 +123,25 @@ const Index = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="w-full"
-                style={{ backgroundColor: "#FF5722", borderColor: "#FF5722" }}
-              >
-                Login
-              </Button>
+              <Space style={{ padding: 24 }} size="large">
+                <HappyProvider>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="w-full"
+                    style={{
+                      position: "relative",
+                      left: "27px",
+                      backgroundColor: "#FF5722",
+                      borderColor: "#FF5722",
+                      width: "400px",
+                    }}
+                    disabled={loading}
+                  >
+                    {loading ? <Spin /> : "Login"}{" "}
+                  </Button>
+                </HappyProvider>
+              </Space>
             </Form.Item>
 
             <div style={{ textAlign: "center" }}>
