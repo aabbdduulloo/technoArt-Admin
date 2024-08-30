@@ -1,10 +1,10 @@
 import React from "react";
-import { Table as AntdTable, Button, Space } from "antd";
+import { Table as AntdTable, Button, Space, Tooltip } from "antd";
 import type { TableColumnsType, TablePaginationConfig } from "antd";
 import {
-  ArrowsAltOutlined,
-  DeleteOutlined,
   EditOutlined,
+  DeleteOutlined,
+  ArrowsAltOutlined,
 } from "@ant-design/icons";
 
 interface DataType {
@@ -25,21 +25,66 @@ const columns: TableColumnsType<DataType> = [
     title: "№",
     dataIndex: "number",
     key: "index",
-    render: (_, __, index) => index + 1,
+    width: 60,
+    align: "center",
+    render: (_, __, index) => <strong>{index + 1}</strong>,
   },
-  { title: "Product Name", dataIndex: "name", key: "name" },
   {
-    title: "Action",
-    key: "Action",
-    render: () => (
+    title: "Category Name",
+    dataIndex: "name",
+    key: "name",
+    align: "center",
+    sorter: (a, b) => a.name.localeCompare(b.name),
+    render: text => <span style={{ fontWeight: 500 }}>{text}</span>,
+  },
+  {
+    title: "Actions",
+    key: "actions",
+    width: "50%",
+    align: "center",
+    render: (_, record) => (
       <Space size="middle">
-        <Button icon={<EditOutlined />}></Button>
-        <Button icon={<DeleteOutlined />}></Button>
-        <Button icon={<ArrowsAltOutlined />}></Button>
+        <Tooltip title="Edit">
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={() => handleEdit(record)}
+          />
+        </Tooltip>
+        <Tooltip title="Delete">
+          <Button
+            type="primary"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => handleDelete(record)}
+          />
+        </Tooltip>
+        <Tooltip title="View Details">
+          <Button
+            type="default"
+            icon={<ArrowsAltOutlined />}
+            onClick={() => handleViewDetails(record)}
+          />
+        </Tooltip>
       </Space>
     ),
   },
 ];
+
+const handleEdit = (record: DataType) => {
+  console.log("Edit record", record);
+  // Edit funksiyasini shu yerda amalga oshiring
+};
+
+const handleDelete = (record: DataType) => {
+  console.log("Delete record", record);
+  // Delete funksiyasini shu yerda amalga oshiring
+};
+
+const handleViewDetails = (record: DataType) => {
+  console.log("View details of", record);
+  // View details funksiyasini shu yerda amalga oshiring
+};
 
 const Table: React.FC<CustomTableProps> = ({ data, pagination, onChange }) => {
   return (
@@ -47,9 +92,12 @@ const Table: React.FC<CustomTableProps> = ({ data, pagination, onChange }) => {
       columns={columns}
       dataSource={data}
       pagination={pagination}
-      onChange={pagination => onChange(pagination)}
+      onChange={onChange}
       rowKey="key"
       bordered
+      size="middle"
+      style={{ backgroundColor: "#fff" }}
+      scroll={{ x: 800 }}
     />
   );
 };

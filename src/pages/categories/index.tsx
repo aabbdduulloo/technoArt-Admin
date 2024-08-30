@@ -68,13 +68,9 @@
 // export default Index;
 
 import { category } from "@service";
+
 import { useEffect, useState } from "react";
-import { Table } from "@components"; // Ensure the path is correct
-// import {
-//   EditOutlined,
-//   DeleteOutlined,
-//   ArrowsAltOutlined,
-// } from "@ant-design/icons";
+import { Table } from "@components";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -83,7 +79,7 @@ const Index = () => {
     page: 1,
     limit: 10,
   });
-  const [total, setTotal] = useState(0); // To store the total number of items
+  const [total, setTotal] = useState(0);
 
   const getData = async () => {
     try {
