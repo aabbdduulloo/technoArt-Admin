@@ -10,8 +10,8 @@ import { HappyProvider } from "@ant-design/happy-work-theme";
 import { Button, Space } from "antd";
 
 type FieldType = {
-  phone_number: string | number;
-  password: string;
+  phone_number: string | undefined;
+  password: string | undefined;
 };
 
 const Index = () => {
