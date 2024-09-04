@@ -1,2 +1,3 @@
-import Table from "./goobal-table";
-export { Table };
+import Table from "./global-table";
+import Modal from "./global-modal";
+export { Table, Modal };

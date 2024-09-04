@@ -30,25 +30,39 @@ const MainLayout = () => {
   };
 
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100vh" }}>
       <Sider
         trigger={null}
         collapsible
         collapsed={collapsed}
-        style={{ height: "100vh" }}
+        style={{
+          height: "100vh",
+          overflow: "auto",
+          position: "fixed",
+          left: 0,
+          top: 0,
+          bottom: 0,
+        }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            padding: "16px",
+            justifyContent: collapsed ? "center" : "space-between",
+            padding: collapsed ? "16px 8px" : "16px",
+            marginBottom: "16px",
           }}
         >
-          <img src={MainLogo} alt="Main Logo" style={{}} />
-          <span style={{ fontSize: "20px", color: "#fff", margin: "9px" }}>
-            TechnoArk
-          </span>
+          <img
+            src={MainLogo}
+            alt="Main Logo"
+            style={{ width: collapsed ? 32 : 48 }}
+          />
+          {!collapsed && (
+            <span style={{ fontSize: "20px", color: "#fff", margin: "9px" }}>
+              TechnoArk
+            </span>
+          )}
         </div>
 
         <Menu
@@ -62,7 +76,7 @@ const MainLayout = () => {
           }))}
         />
       </Sider>
-      <Layout>
+      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
         <Header
           style={{
             padding: 0,
@@ -78,7 +92,7 @@ const MainLayout = () => {
             onClick={() => setCollapsed(!collapsed)}
             style={{
               fontSize: "16px",
-              width: 64,
+              width: 63,
               height: 64,
             }}
           />
