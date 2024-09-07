@@ -36,7 +36,8 @@ const MainLayout = () => {
         collapsible
         collapsed={collapsed}
         style={{
-          height: "100vh",
+          minHeight: "100vh",
+          width: "400px",
           overflow: "auto",
           position: "fixed",
           left: 0,

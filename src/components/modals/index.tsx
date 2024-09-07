@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Input, Modal, Form, notification } from "antd";
-import { category } from "@service"; // Import the category service
+import { category } from "@service";
 
 const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,21 +12,22 @@ const App: React.FC = () => {
 
   const handleOk = async () => {
     try {
-      const values = await form.validateFields(); // Form validation
-      const response = await category.create({ name: values.categoryName });
+      const values = await form.validateFields();
+      const payload = { name: values.categoryName };
+      const res = await category.create(values);
 
-      if (response.status === 200 || response.status === 201) {
+      if (res.status === 200 || res.status === 201) {
         notification.success({
           message: "Category added successfully!",
         });
         setIsModalOpen(false);
         form.resetFields();
-        window.location.reload(); // Refresh the page
+        window.location.reload();
       }
-    } catch (error) {
+    } catch (error: any) {
       notification.error({
         message: "Failed to add category",
-        description: error.message,
+        description: error.message || "Something went wrong",
       });
     }
   };
@@ -38,7 +39,13 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button
+        onClick={showModal}
+        style={{
+          backgroundColor: "#d55200",
+          color: "white",
+        }}
+      >
         Add New Category
       </Button>
       <Modal

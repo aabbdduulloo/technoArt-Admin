@@ -146,7 +146,7 @@ const Index = () => {
 
             <div style={{ textAlign: "center" }}>
               <span>
-                Don’t you have an account? <a href="/register">Registrate</a>
+                Don’t you have an account? <a href="/sign-up">Registrate</a>
               </span>
             </div>
           </Form>
