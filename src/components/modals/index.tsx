@@ -13,7 +13,6 @@ const App: React.FC = () => {
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      const payload = { name: values.categoryName };
       const res = await category.create(values);
 
       if (res.status === 200 || res.status === 201) {
