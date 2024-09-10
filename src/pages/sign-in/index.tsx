@@ -30,7 +30,7 @@ const Index = () => {
             tokens: { access_token },
           } = data;
           saveToken("access_token", access_token);
-          navigate("/main");
+          navigate("/main/products");
         }
       } else {
         console.error(`Kutilmagan javob holati: ${response?.status}`);

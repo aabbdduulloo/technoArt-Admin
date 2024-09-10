@@ -1,76 +1,63 @@
 import React, { useState } from "react";
-import { Button, Input, Modal, Form, notification } from "antd";
+import { Button, Form, Input, Modal, notification } from "antd";
 import { category } from "@service";
 
-const App: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
+  onSuccess,
+}) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   const showModal = () => {
-    setIsModalOpen(true);
+    setIsModalVisible(true);
   };
 
-  const handleOk = async () => {
-    try {
-      const values = await form.validateFields();
-      const res = await category.create(values);
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+  };
 
-      if (res.status === 200 || res.status === 201) {
+  const handleSubmit = async (values: any) => {
+    setLoading(true);
+    try {
+      const response = await category.create({ name: values.name }); // Kategoriya nomini jo'natish
+      if (response.status === 201) {
         notification.success({
           message: "Category added successfully!",
         });
-        setIsModalOpen(false);
         form.resetFields();
-        window.location.reload();
+        setIsModalVisible(false);
+        onSuccess();
       }
     } catch (error: any) {
       notification.error({
         message: "Failed to add category",
-        description: error.message || "Something went wrong",
+        description: error?.response?.data?.message || "Something went wrong",
       });
     }
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    form.resetFields();
+    setLoading(false);
   };
 
   return (
     <>
-      <Button
-        onClick={showModal}
-        style={{
-          backgroundColor: "#d55200",
-          color: "white",
-        }}
-      >
+      <Button type="primary" onClick={showModal}>
         Add New Category
       </Button>
       <Modal
         title="Add New Category"
-        open={isModalOpen}
-        onOk={handleOk}
+        visible={isModalVisible}
         onCancel={handleCancel}
-        okText="Add"
-        cancelButtonProps={{
-          style: { display: "none" },
-        }}
+        onOk={() => form.submit()}
+        okButtonProps={{ loading }}
       >
-        <Form
-          form={form}
-          name="categoryForm"
-          layout="vertical"
-          autoComplete="off"
-        >
+        <Form form={form} onFinish={handleSubmit} layout="vertical">
           <Form.Item
             label="Category Name"
-            name="categoryName"
-            rules={[
-              { required: true, message: "Please input the category name!" },
-            ]}
+            name="name"
+            rules={[{ required: true, message: "Please enter category name!" }]}
           >
-            <Input />
+            <Input placeholder="Enter category name" />
           </Form.Item>
         </Form>
       </Modal>
@@ -78,4 +65,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default AddCategoryModal;
