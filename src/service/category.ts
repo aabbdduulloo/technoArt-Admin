@@ -10,6 +10,6 @@ const category: Category = {
   },
   create: data => https.post("/category/create", data),
   update: (id, data) => https.patch(`/category/update/${id}`, data),
-  delete: (id, data) => https.delete(`/category/delete/${id}`, data),
+  delete: id => https.delete(`/category/delete/${id}`),
 };
 export default category;
