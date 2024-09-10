@@ -1,25 +1,24 @@
-import React, { useState } from "react";
-import { Button, Form, Input, Modal, notification } from "antd";
+import React, { useState, useEffect } from "react";
+import { Form, Input, Modal, notification } from "antd";
 import { category } from "@service";
 
 const UpdateCategoryModal: React.FC<{
+  visible: boolean;
+  onClose: () => void;
   onSuccess: () => void;
   categoryId: string;
   initialName: string;
-}> = ({ onSuccess, categoryId, initialName }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+}> = ({ visible, onClose, onSuccess, categoryId, initialName }) => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const showModal = () => {
-    setIsModalVisible(true);
-    form.setFieldsValue({ name: initialName });
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    form.resetFields();
-  };
+  useEffect(() => {
+    if (visible) {
+      form.setFieldsValue({ name: initialName });
+    } else {
+      form.resetFields();
+    }
+  }, [visible, initialName, form]);
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
@@ -29,42 +28,37 @@ const UpdateCategoryModal: React.FC<{
         notification.success({
           message: "Category updated successfully!",
         });
-        form.resetFields();
-        setIsModalVisible(false);
         onSuccess();
+        onClose();
       }
     } catch (error: any) {
       notification.error({
         message: "Failed to update category",
         description: error?.response?.data?.message || "Something went wrong",
       });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
-    <>
-      <Button type="primary" onClick={showModal}>
-        Update Category
-      </Button>
-      <Modal
-        title="Update Category"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        onOk={() => form.submit()}
-        okButtonProps={{ loading }}
-      >
-        <Form form={form} onFinish={handleSubmit} layout="vertical">
-          <Form.Item
-            label="Category Name"
-            name="name"
-            rules={[{ required: true, message: "Please enter category name!" }]}
-          >
-            <Input placeholder="Enter category name" />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
+    <Modal
+      title="Update Category"
+      visible={visible}
+      onCancel={onClose}
+      onOk={() => form.submit()}
+      okButtonProps={{ loading }}
+    >
+      <Form form={form} onFinish={handleSubmit} layout="vertical">
+        <Form.Item
+          label="Category Name"
+          name="name"
+          rules={[{ required: true, message: "Please enter category name!" }]}
+        >
+          <Input placeholder="Enter category name" />
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 };
 

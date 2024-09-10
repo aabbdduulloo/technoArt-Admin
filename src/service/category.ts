@@ -9,6 +9,7 @@ const category: Category = {
     });
   },
   create: data => https.post("/category/create", data),
-  update: (id, data) => https.put(`/category/update/${id}`, data),
+  update: (id, data) => https.patch(`/category/update/${id}`, data),
+  delete: (id, data) => https.delete(`/category/delete/${id}`, data),
 };
 export default category;

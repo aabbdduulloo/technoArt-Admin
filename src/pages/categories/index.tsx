@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { category } from "@service";
 import { Table, Search } from "@components";
-import { Button, Space, Tooltip } from "antd";
+import { Button, Space, Tooltip, notification } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
   ArrowsAltOutlined,
 } from "@ant-design/icons";
 import { Modals } from "@components";
-import UpdateCategoryModal from "../../components/modals/category-update";
+import { CategoryUpdate } from "@modals";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -18,6 +18,7 @@ const Index = () => {
     id: string;
     name: string;
   } | null>(null);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const val = new URLSearchParams(location.search);
@@ -58,6 +59,29 @@ const Index = () => {
 
   const handleEditClick = (id: string, name: string) => {
     setSelectedCategory({ id, name });
+    setIsUpdateModalVisible(true);
+  };
+
+  const handleDeleteClick = async (id: number) => {
+    try {
+      const response = await category.delete(id);
+      if (response.status === 200) {
+        notification.success({
+          message: "Category deleted successfully!",
+        });
+        getData(); // Ma'lumotlarni qayta yuklash
+      }
+    } catch (error: any) {
+      notification.error({
+        message: "Failed to delete category",
+        description: error?.response?.data?.message || "Something went wrong",
+      });
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsUpdateModalVisible(false);
+    setSelectedCategory(null);
   };
 
   const columns = [
@@ -84,7 +108,11 @@ const Index = () => {
             />
           </Tooltip>
           <Tooltip title="Delete">
-            <Button type="default" icon={<DeleteOutlined />} />
+            <Button
+              type="default"
+              icon={<DeleteOutlined />}
+              onClick={() => handleDeleteClick(record.id)} // O'chirishni bevosita tugmacha orqali amalga oshirish
+            />
           </Tooltip>
           <Tooltip title="View">
             <Button type="default" icon={<ArrowsAltOutlined />} />
@@ -97,7 +125,7 @@ const Index = () => {
   return (
     <div>
       <Search params={params} setParams={setParams} />
-      <Modals onSuccess={getData} />{" "}
+      <Modals onSuccess={getData} />
       <Table
         data={data}
         columns={columns}
@@ -110,10 +138,16 @@ const Index = () => {
         }}
         onChange={handleTableChange}
       />
+
       {/* Kategoriya yangilash modal */}
       {selectedCategory && (
-        <UpdateCategoryModal
-          onSuccess={getData}
+        <CategoryUpdate
+          visible={isUpdateModalVisible}
+          onClose={handleModalClose}
+          onSuccess={() => {
+            getData();
+            handleModalClose();
+          }}
           categoryId={selectedCategory.id}
           initialName={selectedCategory.name}
         />
