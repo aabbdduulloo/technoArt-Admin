@@ -9,5 +9,6 @@ const category: Category = {
     });
   },
   create: data => https.post("/category/create", data),
+  update: (id, data) => https.put(`/category/update/${id}`, data),
 };
 export default category;

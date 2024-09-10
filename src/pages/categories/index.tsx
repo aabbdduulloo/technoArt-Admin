@@ -8,11 +8,16 @@ import {
   DeleteOutlined,
   ArrowsAltOutlined,
 } from "@ant-design/icons";
-import { Modals } from "@components"; // Import qilish
+import { Modals } from "@components";
+import UpdateCategoryModal from "../../components/modals/category-update";
 
 const Index = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const val = new URLSearchParams(location.search);
@@ -51,6 +56,10 @@ const Index = () => {
     navigate(`?${searchParams}`);
   };
 
+  const handleEditClick = (id: string, name: string) => {
+    setSelectedCategory({ id, name });
+  };
+
   const columns = [
     {
       title: "№",
@@ -65,11 +74,14 @@ const Index = () => {
       title: "Actions",
       key: "actions",
       align: "center",
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       render: (_text: string, record: any) => (
         <Space size={"middle"}>
           <Tooltip title="Edit">
-            <Button type="default" icon={<EditOutlined />} />
+            <Button
+              type="default"
+              icon={<EditOutlined />}
+              onClick={() => handleEditClick(record.id, record.name)}
+            />
           </Tooltip>
           <Tooltip title="Delete">
             <Button type="default" icon={<DeleteOutlined />} />
@@ -86,7 +98,6 @@ const Index = () => {
     <div>
       <Search params={params} setParams={setParams} />
       <Modals onSuccess={getData} />{" "}
-      {/* Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilash */}
       <Table
         data={data}
         columns={columns}
@@ -99,6 +110,14 @@ const Index = () => {
         }}
         onChange={handleTableChange}
       />
+      {/* Kategoriya yangilash modal */}
+      {selectedCategory && (
+        <UpdateCategoryModal
+          onSuccess={getData}
+          categoryId={selectedCategory.id}
+          initialName={selectedCategory.name}
+        />
+      )}
     </div>
   );
 };

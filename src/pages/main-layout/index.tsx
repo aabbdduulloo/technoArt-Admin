@@ -69,7 +69,7 @@ const MainLayout = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          // defaultSelectedKeys={["0"]}
           items={routes.map((item, index) => ({
             key: index,
             icon: item.icon,

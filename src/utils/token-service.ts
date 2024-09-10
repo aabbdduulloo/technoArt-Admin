@@ -5,7 +5,7 @@ export const saveToken = (title: string, value: string) => {
 };
 
 export const getToken = (title: string) => {
-  Cookies.get(title);
+  return Cookies.get(title);
 };
 
 export const removeToken = (title: string) => {

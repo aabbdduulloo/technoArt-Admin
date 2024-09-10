@@ -19,5 +19,5 @@ export interface Auth {
 export interface Category {
   get: (params: IParams) => any;
   create: (name: string | number) => Promise<any>;
-  // create: (data: CreateData) => any;
+  update: (id: string | number, data: CreateData) => Promise<any>;
 }
