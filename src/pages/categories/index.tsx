@@ -2,14 +2,11 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { category } from "@service";
 import { Table, Search } from "@components";
-import { Button, Space, Tooltip, notification } from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  ArrowsAltOutlined,
-} from "@ant-design/icons";
+import { Button, Space, Tooltip } from "antd";
+import { EditOutlined, ArrowsAltOutlined } from "@ant-design/icons";
 import { Modals } from "@components";
 import { CategoryUpdate } from "@modals";
+import { CategorDelete } from "@modals"; // MyModal'ni import qilish
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -62,23 +59,6 @@ const Index = () => {
     setIsUpdateModalVisible(true);
   };
 
-  const handleDeleteClick = async (id: number) => {
-    try {
-      const response = await category.delete(id);
-      if (response.status === 200) {
-        notification.success({
-          message: "Category deleted successfully!",
-        });
-        getData(); // Ma'lumotlarni qayta yuklash
-      }
-    } catch (error: any) {
-      notification.error({
-        message: "Failed to delete category",
-        description: error?.response?.data?.message || "Something went wrong",
-      });
-    }
-  };
-
   const handleModalClose = () => {
     setIsUpdateModalVisible(false);
     setSelectedCategory(null);
@@ -108,10 +88,9 @@ const Index = () => {
             />
           </Tooltip>
           <Tooltip title="Delete">
-            <Button
-              type="default"
-              icon={<DeleteOutlined />}
-              onClick={() => handleDeleteClick(record.id)} // O'chirishni bevosita tugmacha orqali amalga oshirish
+            <CategorDelete
+              record={{ id: record.id, name: record.name }}
+              onSuccess={getData}
             />
           </Tooltip>
           <Tooltip title="View">
