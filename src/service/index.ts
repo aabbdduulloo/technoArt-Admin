@@ -1,3 +1,4 @@
 import auth from "./auth";
 import category from "./category";
-export { auth, category };
+import brand from "./brand";
+export { auth, category, brand };

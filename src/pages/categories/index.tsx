@@ -4,9 +4,9 @@ import { category } from "@service";
 import { Table, Search } from "@components";
 import { Button, Space, Tooltip } from "antd";
 import { EditOutlined, ArrowsAltOutlined } from "@ant-design/icons";
-import { Modals } from "@components";
+import { CategoryCreate } from "@modals";
 import { CategoryUpdate } from "@modals";
-import { CategorDelete } from "@modals"; // MyModal'ni import qilish
+import { CategorDelete } from "@modals";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -104,7 +104,7 @@ const Index = () => {
   return (
     <div>
       <Search params={params} setParams={setParams} />
-      <Modals onSuccess={getData} />
+      <CategoryCreate onSuccess={getData} />
       <Table
         data={data}
         columns={columns}

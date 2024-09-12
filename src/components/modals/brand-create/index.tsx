@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Button, Form, Input, Modal, notification } from "antd";
-import { category } from "@service";
+import { brand } from "@service";
 
-const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
-  onSuccess,
-}) => {
+const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -21,10 +19,10 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
-      const response = await category.create({ name: values.name });
+      const response = await brand.create({ name: values.name });
       if (response.status === 201) {
         notification.success({
-          message: "Category added successfully!",
+          message: "Brand added successfully!",
         });
         form.resetFields();
         setIsModalVisible(false);
@@ -32,7 +30,7 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
       }
     } catch (error: any) {
       notification.error({
-        message: "Failed to add category",
+        message: "Failed to add brand",
         description: error?.response?.data?.message || "Something went wrong",
       });
     }
@@ -52,10 +50,10 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
         }}
         onClick={showModal}
       >
-        Add New Category
+        Add New Brand
       </Button>
       <Modal
-        title="Add New Category"
+        title="Add New Brand"
         visible={isModalVisible}
         onCancel={handleCancel}
         onOk={() => form.submit()}
@@ -63,11 +61,11 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
       >
         <Form form={form} onFinish={handleSubmit} layout="vertical">
           <Form.Item
-            label="Category Name"
+            label="Brand Name"
             name="name"
-            rules={[{ required: true, message: "Please enter category name!" }]}
+            rules={[{ required: true, message: "Please enter brand name!" }]}
           >
-            <Input placeholder="Enter category name" />
+            <Input placeholder="Enter brand name" />
           </Form.Item>
         </Form>
       </Modal>
@@ -75,4 +73,4 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
   );
 };
 
-export default AddCategoryModal;
+export default AddBrandModal;

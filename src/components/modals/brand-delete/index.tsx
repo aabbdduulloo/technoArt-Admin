@@ -1,7 +1,7 @@
 import { Button, Modal } from "antd";
 import { useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
-import { category } from "@service";
+import { brand } from "@service";
 import { notification } from "antd";
 
 interface MyModalProps {
@@ -20,17 +20,17 @@ const MyModal: React.FC<MyModalProps> = ({ record, onSuccess }) => {
   const deleteData = async (id: number) => {
     setLoading(true);
     try {
-      const response = await category.delete(id);
+      const response = await brand.delete(id);
       if (response?.status === 200) {
         notification.success({
-          message: "Category deleted successfully",
+          message: "Brand deleted successfully",
         });
         setIsModalVisible(false);
         onSuccess();
       }
     } catch (error: any) {
       notification.error({
-        message: "Failed to delete category",
+        message: "Failed to delete brand",
         description: error?.response?.data?.message || "Something went wrong",
       });
     }
@@ -50,7 +50,7 @@ const MyModal: React.FC<MyModalProps> = ({ record, onSuccess }) => {
         open={isModalVisible}
         onCancel={handleCancel}
         style={{ maxWidth: "400px" }}
-        title="Delete this category?"
+        title="Delete this brand?"
         footer={
           <div className="flex items-center gap-3 justify-end mt-10">
             <Button size="large" type="default" onClick={handleCancel}>
@@ -73,7 +73,7 @@ const MyModal: React.FC<MyModalProps> = ({ record, onSuccess }) => {
         }
       >
         <p>
-          Are you sure you want to delete the category{" "}
+          Are you sure you want to delete the brand{" "}
           <strong>{record.name}</strong>?
         </p>
       </Modal>

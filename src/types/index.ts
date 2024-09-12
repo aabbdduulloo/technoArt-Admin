@@ -21,4 +21,14 @@ export interface Category {
   create: (name: any | number) => Promise<any>;
   update: (id: string | number, data: any) => Promise<any>;
   delete: (id: string | number) => Promise<any>;
+  get_subcategory: (id: string | number) => Promise<any>;
+}
+
+// ==========  Brand =======
+export interface Brand {
+  get: (params: IParams) => any;
+  create: (name: any | number) => Promise<any>;
+  update: (id: string | number, data: any) => Promise<any>;
+  delete: (id: string | number) => Promise<any>;
+  // get_subcategory: (id: string | number) => Promise<any>;
 }
