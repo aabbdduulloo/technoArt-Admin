@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken } from "@token-service";
 
 const https = axios.create({
-  baseURL: "https://texnoshop.ilyosbekdev.uz",
+  baseURL: "https://texnoark.ilyosbekdev.uz",
 });
 
 https.interceptors.request.use(config => {

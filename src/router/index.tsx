@@ -13,6 +13,7 @@ import {
   Categories,
   Brands,
   BrandCategory,
+  SingleCategory,
 } from "@pages";
 const Index = () => {
   const router = createBrowserRouter(
@@ -23,6 +24,7 @@ const Index = () => {
         <Route path="main/*" element={<MainLayout />}>
           <Route path="products" element={<Products />} />
           <Route path="categories" element={<Categories />} />
+          <Route path="categories/:id" element={<SingleCategory />} />
           <Route path="brands" element={<Brands />} />
           <Route path="brand-category" element={<BrandCategory />} />
         </Route>

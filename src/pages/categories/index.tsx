@@ -63,7 +63,10 @@ const Index = () => {
     setIsUpdateModalVisible(false);
     setSelectedCategory(null);
   };
-
+  const moveSingle = (id: number) => {
+    console.log(id);
+    navigate(`/main/categories/${id}`);
+  };
   const columns = [
     {
       title: "№",
@@ -94,7 +97,11 @@ const Index = () => {
             />
           </Tooltip>
           <Tooltip title="View">
-            <Button type="default" icon={<ArrowsAltOutlined />} />
+            <Button
+              type="default"
+              icon={<ArrowsAltOutlined />}
+              onClick={() => moveSingle(record.id)}
+            />
           </Tooltip>
         </Space>
       ),

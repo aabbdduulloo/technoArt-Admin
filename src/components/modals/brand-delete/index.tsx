@@ -60,7 +60,7 @@ const MyModal: React.FC<MyModalProps> = ({ record, onSuccess }) => {
               size="large"
               loading={loading}
               style={{
-                background: "#d55200",
+                background: "#1677ff",
                 color: "#fff",
                 position: "relative",
                 left: "10px",

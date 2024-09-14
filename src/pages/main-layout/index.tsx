@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, theme, Menu, Modal } from "antd";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import routes from "../../router/routes";
 import MainLogo from "../../assets/main-logo.svg";
 
@@ -13,6 +13,19 @@ const { Header, Sider, Content } = Layout;
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  const [selectedKey, setSelectedKey] = useState("");
+
+  useEffect(() => {
+    // Find the active route and set the selected key based on the current path
+    const currentRouteIndex = routes.findIndex(
+      route => route.path === location.pathname
+    );
+    console.log(currentRouteIndex);
+    if (currentRouteIndex !== -1) {
+      setSelectedKey(currentRouteIndex.toString());
+    }
+  }, [location.pathname, routes]);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -65,13 +78,12 @@ const MainLayout = () => {
             </span>
           )}
         </div>
-
         <Menu
           theme="dark"
           mode="inline"
-          // defaultSelectedKeys={["0"]}
+          selectedKeys={[selectedKey]} // Dynamically set selected keys
           items={routes.map((item, index) => ({
-            key: index,
+            key: index.toString(), // Use string keys for consistency
             icon: item.icon,
             label: <NavLink to={item.path}>{item.title}</NavLink>,
           }))}

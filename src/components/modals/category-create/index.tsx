@@ -44,10 +44,10 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
       <Button
         size="large"
         style={{
-          background: "#d55200",
+          background: "#1677ff",
           color: "#fff",
           position: "relative",
-          left: "66%",
+          left: "60%",
           bottom: "10px",
         }}
         onClick={showModal}
