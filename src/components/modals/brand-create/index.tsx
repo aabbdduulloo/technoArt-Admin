@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Modal, notification, Upload, Image } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  notification,
+  Upload,
+  Image,
+  Select,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { brand } from "@service";
+import { brand, category } from "@service";
 import type { UploadFile, UploadProps } from "antd";
 
 type FileType = File & { preview?: string };
@@ -45,11 +54,14 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
+    const formData: any = new FormData();
+    formData.append("file", values.image);
+    formData.append("name", values.name);
+    formData.append("category_id", values.category_id);
+    formData.append("description", values.description);
     try {
       // Assuming the API expects formData for uploading files
       const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("description", values.description);
       fileList.forEach(file => {
         if (file.originFileObj) {
           formData.append("image", file.originFileObj);
@@ -104,13 +116,24 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         onOk={() => form.submit()}
         okButtonProps={{ loading }}
       >
-        <Form form={form} onFinish={handleSubmit} layout="vertical">
+        <Form
+          form={form}
+          onFinish={values => handleSubmit(values)}
+          layout="vertical"
+        >
           <Form.Item
             label="Brand Name"
             name="name"
             rules={[{ required: true, message: "Please enter brand name!" }]}
           >
             <Input placeholder="Enter brand name" />
+          </Form.Item>
+          <Form.Item
+            label="Select category"
+            name="category_id"
+            rules={[{ required: true, message: "Enter category name" }]}
+          >
+            <Select size="large" options={category} />
           </Form.Item>
           <Form.Item
             label="Description"
