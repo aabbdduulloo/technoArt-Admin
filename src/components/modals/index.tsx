@@ -4,6 +4,7 @@ import CategorDelete from "./category-delete";
 import BrandCreate from "./brand-create";
 import BrandUpdate from "./brand-update";
 import BrandDelete from "./brand-delete";
+import SubCategoryCreate from "./subcategory-create";
 
 export {
   CategoryCreate,
@@ -12,4 +13,5 @@ export {
   BrandCreate,
   BrandUpdate,
   BrandDelete,
+  SubCategoryCreate,
 };

@@ -11,6 +11,5 @@ const category: Category = {
   create: data => https.post("/category/create", data),
   update: (id, data) => https.patch(`/category/update/${id}`, data),
   delete: id => https.delete(`/category/delete/${id}`),
-  get_subcategory: id => https.get(`/sub-category/search/${id}`, {}),
 };
 export default category;

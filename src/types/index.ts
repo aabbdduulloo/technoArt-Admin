@@ -21,7 +21,14 @@ export interface Category {
   create: (name: any | number) => Promise<any>;
   update: (id: string | number, data: any) => Promise<any>;
   delete: (id: string | number) => Promise<any>;
-  get_subcategory: (id: string | number) => Promise<any>;
+}
+
+// ////////  SubCategoty ///////
+export interface SubCategoty {
+  get_subcategory: (id: any, params: any) => any;
+  create_subcategory: (data: any) => any;
+  update_subcategory: (id: number, data: any) => any;
+  delete_subcategory: (id: number) => any;
 }
 
 // ==========  Brand =======
