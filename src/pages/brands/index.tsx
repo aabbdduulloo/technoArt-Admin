@@ -29,7 +29,7 @@ const Index = () => {
     try {
       const response = await brand.get(params);
       if (response.status === 200) {
-        setData(response?.data?.data?.categories);
+        setData(response?.data?.data?.brands);
         setTotal(response?.data?.data?.count);
       }
     } catch (err: any) {
@@ -39,6 +39,7 @@ const Index = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   const handleTableChange = (pagination: any) => {
@@ -115,7 +116,7 @@ const Index = () => {
         onChange={handleTableChange}
       />
 
-      {/* BRAND yangilash modal */}
+      {/* Kategoriya yangilash modal */}
       {selectedBrand && (
         <BrandUpdate
           visible={isUpdateModalVisible}

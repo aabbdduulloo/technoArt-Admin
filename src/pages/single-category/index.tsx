@@ -1,17 +1,40 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { subcategory, category } from "@service";
 import { SubCategoryCreate } from "@modals";
 import { Table, Search } from "@components";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { SubCategoryDelete } from "@modals";
+import { SubCategoryUpdate } from "@modals";
+import { Button, Space, Tooltip } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 const Index = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
+  const [selectedCategorySingle, setSelectedCategorySingle] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [categories, setCategories] = useState([]);
+  const val = new URLSearchParams(location.search);
+  const navigate = useNavigate();
+
   const [params, setParams] = useState({
-    search: "",
+    search: val.get("search") || "",
     page: 1,
     limit: 10,
   });
+
+  const handleEditClick = (id: string, name: string) => {
+    setSelectedCategorySingle({ id, name });
+    setIsUpdateModalVisible(true);
+  };
+  const handleModalClose = () => {
+    setIsUpdateModalVisible(false);
+    setSelectedCategorySingle(null);
+  };
   const getCategories = async () => {
     try {
       const response = await category.get(params);
@@ -30,7 +53,8 @@ const Index = () => {
       if (categoryId) {
         const response = await subcategory.get_subcategory(categoryId, params);
         if (response.status === 200) {
-          setData(response?.data?.data?.categories);
+          console.log("Response Data:", response?.data?.data?.categories);
+          setData(response?.data?.data?.subcategories);
           setTotal(response?.data?.data?.count);
         }
       }
@@ -47,7 +71,7 @@ const Index = () => {
 
   useEffect(() => {
     getCategories();
-  }, []);
+  }, [params]);
 
   const columns = [
     {
@@ -69,15 +93,37 @@ const Index = () => {
       dataIndex: "action",
       key: "action",
       align: "center",
+      render: (_text: string, record: any) => (
+        <Space size={"middle"}>
+          <Tooltip title="Edit">
+            <Button
+              type="default"
+              icon={<EditOutlined />}
+              onClick={() => handleEditClick(record.id, record.name)}
+            />
+          </Tooltip>
+          <Tooltip title="Delete">
+            <SubCategoryDelete
+              record={{ id: record.id, name: record.name }}
+              onSuccess={getData}
+            />
+          </Tooltip>
+        </Space>
+      ),
     },
   ];
 
   const handleTableChange = (pagination: any) => {
-    setParams({
-      ...params,
-      page: pagination.current,
-      limit: pagination.pageSize,
-    });
+    const { current = 1, pageSize = 10 } = pagination;
+    setParams(prev => ({
+      ...prev,
+      page: current,
+      limit: pageSize,
+    }));
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("page", `${current}`);
+    searchParams.set("limit", `${pageSize}`);
+    navigate(`?${searchParams}`);
   };
 
   return (
@@ -96,6 +142,18 @@ const Index = () => {
         }}
         onChange={handleTableChange}
       />
+      {selectedCategorySingle && (
+        <SubCategoryUpdate
+          visible={isUpdateModalVisible}
+          onClose={handleModalClose}
+          onSuccess={() => {
+            getData();
+            handleModalClose();
+          }}
+          categoryId={selectedCategorySingle.id}
+          initialName={selectedCategorySingle.name}
+        />
+      )}
     </div>
   );
 };

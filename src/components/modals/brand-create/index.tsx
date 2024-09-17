@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Form,
@@ -11,7 +11,8 @@ import {
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { brand, category } from "@service";
-import type { UploadFile, UploadProps } from "antd";
+import type { UploadFile } from "antd";
+import { useParams } from "react-router-dom";
 
 type FileType = File & { preview?: string };
 
@@ -30,10 +31,28 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [form] = Form.useForm();
+  const [categories, setCategories] = useState([]);
+  useParams();
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const fetchCategories = async () => {
+    try {
+      const response = await category.get({ limit: 10, page: 1 });
+      if (response?.status === 200) {
+        setCategories(
+          response.data.data.categories.map((item: any) => ({
+            label: item.name,
+            value: item.id,
+          }))
+        );
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -49,18 +68,9 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
     setPreviewOpen(true);
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
-
   const handleSubmit = async (values: any) => {
     setLoading(true);
-    const formData: any = new FormData();
-    formData.append("file", values.image);
-    formData.append("name", values.name);
-    formData.append("category_id", values.category_id);
-    formData.append("description", values.description);
     try {
-      // Assuming the API expects formData for uploading files
       const formData = new FormData();
       fileList.forEach(file => {
         if (file.originFileObj) {
@@ -68,7 +78,14 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         }
       });
 
-      const response = await brand.create(formData);
+      const brandData = {
+        name: values.name,
+        category_id: values.category_id,
+        description: values.description,
+        file: values.file,
+      };
+
+      const response = await brand.create(brandData);
       if (response.status === 201) {
         notification.success({
           message: "Brand added successfully!",
@@ -97,30 +114,26 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   return (
     <>
       <Button
+        onClick={() => setIsModalVisible(true)}
         size="large"
         style={{
-          background: "#d55200",
+          background: "#1677ff",
           color: "#fff",
           position: "relative",
           left: "66%",
           bottom: "10px",
         }}
-        onClick={showModal}
       >
         Add New Brand
       </Button>
       <Modal
+        open={isModalVisible}
         title="Add New Brand"
-        visible={isModalVisible}
         onCancel={handleCancel}
         onOk={() => form.submit()}
         okButtonProps={{ loading }}
       >
-        <Form
-          form={form}
-          onFinish={values => handleSubmit(values)}
-          layout="vertical"
-        >
+        <Form form={form} onFinish={handleSubmit} layout="vertical">
           <Form.Item
             label="Brand Name"
             name="name"
@@ -129,11 +142,11 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
             <Input placeholder="Enter brand name" />
           </Form.Item>
           <Form.Item
-            label="Select category"
+            label="Select Category"
             name="category_id"
-            rules={[{ required: true, message: "Enter category name" }]}
+            rules={[{ required: true, message: "Please select category!" }]}
           >
-            <Select size="large" options={category} />
+            <Select options={categories} size="large" />
           </Form.Item>
           <Form.Item
             label="Description"
@@ -146,11 +159,12 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
           </Form.Item>
           <Form.Item label="Upload Image">
             <Upload
+              name="file"
               listType="picture-card"
               fileList={fileList}
               onPreview={handlePreview}
-              onChange={handleChange}
-              beforeUpload={() => false} // Prevent automatic upload
+              onChange={({ fileList }) => setFileList(fileList)}
+              beforeUpload={() => false}
             >
               {fileList.length >= 1 ? null : uploadButton}
             </Upload>
@@ -160,7 +174,6 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                 preview={{
                   visible: previewOpen,
                   onVisibleChange: visible => setPreviewOpen(visible),
-                  afterOpenChange: visible => !visible && setPreviewImage(""),
                 }}
                 src={previewImage}
               />

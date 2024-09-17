@@ -1,7 +1,7 @@
 import { Button, Modal } from "antd";
 import { useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
-import { category } from "@service";
+import { subcategory } from "@service";
 import { notification } from "antd";
 
 interface MyModalProps {
@@ -20,7 +20,7 @@ const MyModal: React.FC<MyModalProps> = ({ record, onSuccess }) => {
   const deleteData = async (id: number) => {
     setLoading(true);
     try {
-      const response = await category.delete(id);
+      const response = await subcategory.delete_subcategory(id);
       if (response?.status === 200) {
         notification.success({
           message: "Category deleted successfully",
@@ -71,7 +71,7 @@ const MyModal: React.FC<MyModalProps> = ({ record, onSuccess }) => {
         }
       >
         <p>
-          Are you sure you want to delete the category{" "}
+          Are you sure you want to delete the subcategory{" "}
           <strong>{record.name}</strong>?
         </p>
       </Modal>

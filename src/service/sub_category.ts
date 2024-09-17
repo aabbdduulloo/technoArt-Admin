@@ -1,6 +1,6 @@
 import https from "./config";
-import { SubCategoty } from "@types";
-const subcategory: SubCategoty = {
+import { SubCategory } from "@types";
+const subcategory: SubCategory = {
   get_subcategory: (id, params) =>
     https.get(`/sub-category/search/${id}`, { params }),
   create_subcategory: data => https.post("/sub-category/create", data),

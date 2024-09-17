@@ -39,13 +39,11 @@ const MyModal: React.FC<MyModalProps> = ({ record, onSuccess }) => {
 
   return (
     <>
-      {/* Delete tugmasi */}
       <Button
         onClick={() => setIsModalVisible(true)}
         icon={<DeleteOutlined />}
       />
 
-      {/* Modal oyna */}
       <Modal
         open={isModalVisible}
         onCancel={handleCancel}

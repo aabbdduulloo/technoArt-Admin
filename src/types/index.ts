@@ -24,7 +24,7 @@ export interface Category {
 }
 
 // ////////  SubCategoty ///////
-export interface SubCategoty {
+export interface SubCategory {
   get_subcategory: (id: any, params: any) => any;
   create_subcategory: (data: any) => any;
   update_subcategory: (id: number, data: any) => any;
@@ -34,8 +34,8 @@ export interface SubCategoty {
 // ==========  Brand =======
 export interface Brand {
   get: (params: IParams) => any;
+  get_brands_by_category: (id: any) => any;
   create: (name: any | number) => Promise<any>;
   update: (id: string | number, data: any) => Promise<any>;
   delete: (id: string | number) => Promise<any>;
-  // get_subcategory: (id: string | number) => Promise<any>;
 }

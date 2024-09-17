@@ -39,6 +39,7 @@ const Index = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   const handleTableChange = (pagination: any) => {
@@ -125,7 +126,6 @@ const Index = () => {
         onChange={handleTableChange}
       />
 
-      {/* Kategoriya yangilash modal */}
       {selectedCategory && (
         <CategoryUpdate
           visible={isUpdateModalVisible}
