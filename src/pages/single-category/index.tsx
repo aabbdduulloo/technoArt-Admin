@@ -3,7 +3,7 @@ import { subcategory, category } from "@service";
 import { SubCategoryCreate } from "@modals";
 import { Table, Search } from "@components";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SubCategoryDelete } from "@modals";
 import { SubCategoryUpdate } from "@modals";
 import { Button, Space, Tooltip } from "antd";
@@ -19,6 +19,7 @@ const Index = () => {
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const val = new URLSearchParams(location.search);
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [params, setParams] = useState({
@@ -48,15 +49,10 @@ const Index = () => {
 
   const getData = async () => {
     try {
-      const categoryId = categories.length > 0 ? categories[0].id : null;
-
-      if (categoryId) {
-        const response = await subcategory.get_subcategory(categoryId, params);
-        if (response.status === 200) {
-          console.log("Response Data:", response?.data?.data?.categories);
-          setData(response?.data?.data?.subcategories);
-          setTotal(response?.data?.data?.count);
-        }
+      const response = await subcategory.get_subcategory(id, params);
+      if (response.status === 200) {
+        setData(response?.data?.data?.subcategories);
+        setTotal(response?.data?.data?.count);
       }
     } catch (err: any) {
       console.log(err);
@@ -129,7 +125,7 @@ const Index = () => {
   return (
     <div>
       <Search params={params} setParams={setParams} />
-      <SubCategoryCreate />{" "}
+      <SubCategoryCreate data={data} setData={setData} />{" "}
       <Table
         data={data}
         columns={columns}

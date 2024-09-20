@@ -6,7 +6,7 @@ const UpdateCategoryModal: React.FC<{
   visible: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  categoryId: string;
+  categoryId: any;
   initialName: string;
 }> = ({ visible, onClose, onSuccess, categoryId, initialName }) => {
   const [loading, setLoading] = useState(false);

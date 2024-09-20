@@ -12,8 +12,10 @@ const Index = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [selectedBrand, setSelectedBrand] = useState<{
+    description: string;
     id: string;
     name: string;
+    categoryId: number;
   } | null>(null);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const location = useLocation();
@@ -55,8 +57,13 @@ const Index = () => {
     navigate(`?${searchParams}`);
   };
 
-  const handleEditClick = (id: string, name: string) => {
-    setSelectedBrand({ id, name });
+  const handleEditClick = (
+    id: string,
+    name: string,
+    description: string,
+    categoryId: any
+  ) => {
+    setSelectedBrand({ id, name, description, categoryId });
     setIsUpdateModalVisible(true);
   };
 
@@ -85,7 +92,14 @@ const Index = () => {
             <Button
               type="default"
               icon={<EditOutlined />}
-              onClick={() => handleEditClick(record.id, record.name)}
+              onClick={() =>
+                handleEditClick(
+                  record.id,
+                  record.name,
+                  record.description,
+                  record.categoryId
+                )
+              }
             />
           </Tooltip>
           <Tooltip title="Delete">
@@ -116,7 +130,6 @@ const Index = () => {
         onChange={handleTableChange}
       />
 
-      {/* Kategoriya yangilash modal */}
       {selectedBrand && (
         <BrandUpdate
           visible={isUpdateModalVisible}
@@ -127,6 +140,8 @@ const Index = () => {
           }}
           brandId={selectedBrand.id}
           initialName={selectedBrand.name}
+          initialDescription={selectedBrand.description}
+          initialCategoryId={selectedBrand.categoryId}
         />
       )}
     </div>

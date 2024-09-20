@@ -3,7 +3,7 @@ import { Button, Form, Input, Modal } from "antd";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-const MyModal: React.FC = () => {
+const MyModal: React.FC = ({ data, setData }: any) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   //   const { createSubCategory } = useCategoryStore();
   const [loading, setLoading] = useState(false);
@@ -22,6 +22,9 @@ const MyModal: React.FC = () => {
     if (response?.status === 201) {
       setIsModalVisible(false);
       form.resetFields();
+      // let new_data = {name:}
+      data.push(response?.data?.data);
+      setData([...data]);
     }
     setLoading(false);
   };
@@ -31,9 +34,17 @@ const MyModal: React.FC = () => {
         onClick={() => setIsModalVisible(true)}
         size="large"
         type="primary"
+        style={{
+          background: "#1677ff",
+          color: "#fff",
+          position: "relative",
+          left: "786px",
+          bottom: "10px",
+        }}
       >
         Add New Subategory
       </Button>
+
       <Modal
         open={isModalVisible}
         onCancel={handleCancel}

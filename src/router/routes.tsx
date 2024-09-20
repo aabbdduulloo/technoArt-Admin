@@ -25,6 +25,11 @@ const routes = [
     path: "/main/brand-category",
     icon: <ShopOutlined />,
   },
+  {
+    title: "Ads",
+    path: "/main/ads",
+    icon: <ShopOutlined />,
+  },
 ];
 
 export default routes;

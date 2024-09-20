@@ -70,22 +70,21 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
+    const formData = new FormData();
+
+    fileList.forEach(file => {
+      if (file.originFileObj) {
+        formData.append("file", file.originFileObj);
+      }
+    });
+
+    formData.append("name", values.name);
+    formData.append("category_id", values.category_id);
+    formData.append("description", values.description);
+
     try {
-      const formData = new FormData();
-      fileList.forEach(file => {
-        if (file.originFileObj) {
-          formData.append("image", file.originFileObj);
-        }
-      });
+      const response = await brand.create(formData);
 
-      const brandData = {
-        name: values.name,
-        category_id: values.category_id,
-        description: values.description,
-        file: values.file,
-      };
-
-      const response = await brand.create(brandData);
       if (response.status === 201) {
         notification.success({
           message: "Brand added successfully!",
@@ -120,7 +119,7 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
           background: "#1677ff",
           color: "#fff",
           position: "relative",
-          left: "66%",
+          left: "364px",
           bottom: "10px",
         }}
       >
@@ -157,7 +156,7 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
           >
             <Input placeholder="Enter brand description" />
           </Form.Item>
-          <Form.Item label="Upload Image">
+          <Form.Item label="Upload Image" name={"file"}>
             <Upload
               name="file"
               listType="picture-card"

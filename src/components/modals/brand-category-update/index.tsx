@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Modal, notification, Select } from "antd";
-import { brand, category } from "@service";
+import { brandcategory, brand } from "@service";
 
 const UpdateBrandModal: React.FC<{
   visible: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  brandId: string;
+  brandId: any;
   initialName: string;
-  initialDescription: string;
   initialCategoryId: number;
 }> = ({
   visible,
@@ -16,7 +15,6 @@ const UpdateBrandModal: React.FC<{
   onSuccess,
   brandId,
   initialName,
-  initialDescription,
   initialCategoryId,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -25,23 +23,21 @@ const UpdateBrandModal: React.FC<{
 
   useEffect(() => {
     if (visible) {
-      // Set all initial values in a single call
       form.setFieldsValue({
         name: initialName,
-        description: initialDescription,
         categoryId: initialCategoryId,
       });
     } else {
       form.resetFields();
     }
-  }, [visible, initialName, initialDescription, initialCategoryId, form]);
+  }, [visible, initialName, initialCategoryId, form]);
 
   const fetchCategories = async () => {
     try {
-      const response = await category.get({ limit: 10, page: 1 });
+      const response = await brand.get({ limit: 10, page: 1 });
       if (response?.status === 200) {
         setCategories(
-          response.data.data.categories.map((item: any) => ({
+          response.data.data.brands.map((item: any) => ({
             label: item.name,
             value: item.id,
           }))
@@ -59,10 +55,9 @@ const UpdateBrandModal: React.FC<{
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
-      const response = await brand.update(brandId, {
+      const response = await brandcategory.update_brand_category(brandId, {
         name: values.name,
-        description: values.description,
-        categoryId: values.categoryId,
+        brand_id: values.brand_id,
       });
       if (response.status === 200) {
         notification.success({
@@ -83,7 +78,7 @@ const UpdateBrandModal: React.FC<{
 
   return (
     <Modal
-      title="Update Brand"
+      title="Update Brand Category"
       visible={visible}
       onCancel={onClose}
       onOk={() => form.submit()}
@@ -91,27 +86,18 @@ const UpdateBrandModal: React.FC<{
     >
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <Form.Item
-          label="Brand Name"
+          label="Brand Category Name"
           name="name"
           rules={[{ required: true, message: "Please enter brand name!" }]}
         >
           <Input placeholder="Enter brand name" />
         </Form.Item>
         <Form.Item
-          label="Select category"
+          label="Select brand"
           name="categoryId"
           rules={[{ required: true, message: "Please select category!" }]}
         >
           <Select size="large" options={categories} />
-        </Form.Item>
-        <Form.Item
-          label="Brand description"
-          name="description"
-          rules={[
-            { required: true, message: "Please enter brand description!" },
-          ]}
-        >
-          <Input placeholder="Enter brand description" />
         </Form.Item>
       </Form>
     </Modal>

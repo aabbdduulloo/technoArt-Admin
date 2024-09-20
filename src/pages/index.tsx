@@ -6,6 +6,7 @@ import Categories from "./categories/index";
 import Products from "./products/index";
 import BrandCategory from "./brand-category/index";
 import SingleCategory from "./single-category/index";
+import Ads from "./ads";
 export {
   SignIn,
   SignUp,
@@ -15,4 +16,5 @@ export {
   Products,
   BrandCategory,
   SingleCategory,
+  Ads,
 };

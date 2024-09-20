@@ -25,7 +25,7 @@ const MainLayout = () => {
     if (currentRouteIndex !== -1) {
       setSelectedKey(currentRouteIndex.toString());
     }
-  }, [location.pathname, routes]);
+  }, [location.pathname]);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
