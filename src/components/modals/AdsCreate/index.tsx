@@ -1,18 +1,8 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  notification,
-  Upload,
-  Image,
-  Select,
-} from "antd";
+import React, { useState } from "react";
+import { Button, Form, Input, Modal, notification, Upload, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { brand, category } from "@service";
+import { ads } from "@service";
 import type { UploadFile } from "antd";
-import { useParams } from "react-router-dom";
 import { HappyProvider } from "@ant-design/happy-work-theme";
 
 type FileType = File & { preview?: string };
@@ -32,28 +22,6 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [form] = Form.useForm();
-  const [categories, setCategories] = useState([]);
-  useParams();
-
-  const fetchCategories = async () => {
-    try {
-      const response = await category.get({ limit: 10, page: 1 });
-      if (response?.status === 200) {
-        setCategories(
-          response.data.data.categories.map((item: any) => ({
-            label: item.name,
-            value: item.id,
-          }))
-        );
-      }
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -79,16 +47,14 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
       }
     });
 
-    formData.append("name", values.name);
-    formData.append("category_id", values.category_id);
-    formData.append("description", values.description);
+    formData.append("position", values.position);
 
     try {
-      const response = await brand.create(formData);
+      const response = await ads.create_ads(formData);
 
       if (response.status === 201) {
         notification.success({
-          message: "Brand added successfully!",
+          message: "Banner added successfully!",
         });
         form.resetFields();
         setIsModalVisible(false);
@@ -125,39 +91,25 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
             bottom: "10px",
           }}
         >
-          Add New Brand
+          Add New Banner
         </Button>
       </HappyProvider>
       <Modal
         open={isModalVisible}
-        title="Add New Brand"
+        title="Add New Banner"
         onCancel={handleCancel}
         onOk={() => form.submit()}
         okButtonProps={{ loading }}
       >
         <Form form={form} onFinish={handleSubmit} layout="vertical">
           <Form.Item
-            label="Brand Name"
-            name="name"
-            rules={[{ required: true, message: "Please enter brand name!" }]}
-          >
-            <Input placeholder="Enter brand name" />
-          </Form.Item>
-          <Form.Item
-            label="Select Category"
-            name="category_id"
-            rules={[{ required: true, message: "Please select category!" }]}
-          >
-            <Select options={categories} size="large" />
-          </Form.Item>
-          <Form.Item
-            label="Description"
-            name="description"
+            label="Position"
+            name="position"
             rules={[
-              { required: true, message: "Please enter brand description!" },
+              { required: true, message: "Please enter brand position!" },
             ]}
           >
-            <Input placeholder="Enter brand description" />
+            <Input placeholder="Enter brand position" />
           </Form.Item>
           <Form.Item label="Upload Image" name={"file"}>
             <Upload

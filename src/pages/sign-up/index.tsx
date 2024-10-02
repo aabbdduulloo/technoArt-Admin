@@ -24,16 +24,20 @@ const Index = () => {
   const onFinish: FormProps<FieldType>["onFinish"] = async values => {
     setLoading(true);
     try {
-      const response: any = await auth.sign_in(values);
+      const response: any = await auth.sign_up(values);
       if (response && response.status === 201) {
-        Notification("success", "Success", "You have successfully signed in.");
+        Notification(
+          "success",
+          "Success",
+          "You have successfully signuped in."
+        );
         const data = response.data?.data;
         if (data && data.tokens && data.tokens.access_token) {
           const {
             tokens: { access_token },
           } = data;
           saveToken("access_token", access_token);
-          navigate("/main");
+          navigate("/");
         }
       } else {
         console.error(`Kutilmagan javob holati: ${response?.status}`);
@@ -100,6 +104,24 @@ const Index = () => {
             autoComplete="off"
           >
             <Form.Item
+              label="First name"
+              name="first_name"
+              rules={[
+                { required: true, message: "Please input your first name!" },
+              ]}
+            >
+              <Input size="large" />
+            </Form.Item>
+            <Form.Item
+              label="Last name"
+              name="last_name"
+              rules={[
+                { required: true, message: "Please input your first name!" },
+              ]}
+            >
+              <Input size="large" />
+            </Form.Item>
+            <Form.Item
               label="Phone Number"
               name="phone_number"
               rules={[
@@ -110,6 +132,13 @@ const Index = () => {
               ]}
             >
               <Input />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ type: "email", required: true }]}
+            >
+              <Input size="large" />
             </Form.Item>
 
             <Form.Item

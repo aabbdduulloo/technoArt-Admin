@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Input, Modal, notification, Select } from "antd";
 import { brand, brandcategory } from "@service";
+import { HappyProvider } from "@ant-design/happy-work-theme";
 
 interface Category {
   label: string;
@@ -65,19 +66,21 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
   return (
     <>
-      <Button
-        onClick={() => setIsModalVisible(true)}
-        size="large"
-        style={{
-          background: "#1677ff",
-          color: "#fff",
-          position: "relative",
-          left: "364px",
-          bottom: "10px",
-        }}
-      >
-        Add New Brand Category
-      </Button>
+      <HappyProvider>
+        <Button
+          onClick={() => setIsModalVisible(true)}
+          size="large"
+          style={{
+            background: "#1677ff",
+            color: "#fff",
+            position: "relative",
+            left: "364px",
+            bottom: "10px",
+          }}
+        >
+          Add New Brand Category
+        </Button>
+      </HappyProvider>
       <Modal
         open={isModalVisible}
         title="Add New Brand"

@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 const MyModal: React.FC = ({ data, setData }: any) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  //   const { createSubCategory } = useCategoryStore();
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const { id } = useParams();
@@ -22,7 +21,6 @@ const MyModal: React.FC = ({ data, setData }: any) => {
     if (response?.status === 201) {
       setIsModalVisible(false);
       form.resetFields();
-      // let new_data = {name:}
       data.push(response?.data?.data);
       setData([...data]);
     }

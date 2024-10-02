@@ -1,65 +1,163 @@
-import React, { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload } from "antd";
-import type { GetProp, UploadFile, UploadProps } from "antd";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { product } from "@service";
+import { Table, Search, ConfirmDelete } from "@components";
+import { Button, Space, Tooltip } from "antd";
+import { EditOutlined, ArrowsAltOutlined } from "@ant-design/icons";
+import { ProductCreate } from "@modals";
+import { ProductUpdate } from "@modals";
+import { notification } from "antd";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = error => reject(error);
+const Index = () => {
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const val = new URLSearchParams(location.search);
+  const [params, setParams] = useState({
+    search: val.get("search") || "",
+    page: 1,
+    limit: 10,
   });
 
-const App: React.FC = () => {
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType);
+  const getData = async () => {
+    try {
+      const response = await product.get_products(params);
+      if (response.status === 200) {
+        setData(response?.data?.data?.products);
+        setTotal(response?.data?.data?.count);
+      }
+    } catch (err: any) {
+      console.log(err);
     }
-
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
   };
 
-  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
-  const uploadButton = (
-    <button style={{ border: 0, background: "none" }} type="button">
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
+  const handleTableChange = (pagination: any) => {
+    const { current = 1, pageSize = 10 } = pagination;
+    setParams(prev => ({
+      ...prev,
+      page: current,
+      limit: pageSize,
+    }));
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("page", `${current}`);
+    searchParams.set("limit", `${pageSize}`);
+    navigate(`?${searchParams}`);
+  };
+
+  const handleEditClick = (id: string, name: string) => {
+    setSelectedCategory({ id, name });
+    setIsUpdateModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsUpdateModalVisible(false);
+    setSelectedCategory(null);
+  };
+
+  const moveSingle = (id: number) => {
+    console.log(id);
+    navigate(`/main/products/${id}`);
+  };
+
+  const handleDelete = async (id: any) => {
+    try {
+      await product.delete_product(id);
+      notification.success({
+        message: "Category deleted successfully",
+      });
+      getData();
+    } catch (error: any) {
+      notification.error({
+        message: "Failed to delete category",
+        description: error?.response?.data?.message || "Something went wrong",
+      });
+    }
+  };
+
+  const columns = [
+    {
+      title: "№",
+      dataIndex: "index",
+      key: "index",
+      align: "center",
+      render: (_text: string, _record: any, index: number) =>
+        `${(params.page - 1) * params.limit + index + 1}`,
+    },
+    { title: "Name", dataIndex: "name", key: "name", align: "center" },
+    {
+      title: "Actions",
+      key: "actions",
+      align: "center",
+      render: (_text: string, record: any) => (
+        <Space size={"middle"}>
+          <Tooltip title="Edit">
+            <Button
+              type="default"
+              icon={<EditOutlined />}
+              onClick={() => handleEditClick(record.id, record.name)}
+            />
+          </Tooltip>
+          <Tooltip title="Delete">
+            <ConfirmDelete
+              id={record.id}
+              deleteItem={handleDelete}
+              // onSuccess={getData}
+            />
+          </Tooltip>
+          <Tooltip title="View">
+            <Button
+              type="default"
+              icon={<ArrowsAltOutlined />}
+              onClick={() => moveSingle(record.id)}
+            />
+          </Tooltip>
+        </Space>
+      ),
+    },
+  ];
+
   return (
-    <>
-      <Upload
-        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-        listType="picture-card"
-        fileList={fileList}
-        onPreview={handlePreview}
-        onChange={handleChange}
-      >
-        {fileList.length >= 8 ? null : uploadButton}
-      </Upload>
-      {previewImage && (
-        <Image
-          wrapperStyle={{ display: "none" }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: visible => setPreviewOpen(visible),
-            afterOpenChange: visible => !visible && setPreviewImage(""),
+    <div>
+      <Search params={params} setParams={setParams} />
+      <ProductCreate onSuccess={getData} />
+      <Table
+        data={data}
+        columns={columns}
+        pagination={{
+          current: params.page,
+          pageSize: params.limit,
+          total: total,
+          showSizeChanger: true,
+          pageSizeOptions: ["2", "5", "7", "10"],
+        }}
+        onChange={handleTableChange}
+      />
+
+      {selectedCategory && (
+        <ProductUpdate
+          visible={isUpdateModalVisible}
+          onClose={handleModalClose}
+          onSuccess={() => {
+            getData();
+            handleModalClose();
           }}
-          src={previewImage}
+          categoryId={selectedCategory.id}
+          initialName={selectedCategory.name}
         />
       )}
-    </>
+    </div>
   );
 };
 
-export default App;
+export default Index;

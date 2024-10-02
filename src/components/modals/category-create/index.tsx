@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form, Input, Modal, notification } from "antd";
 import { category } from "@service";
+import { HappyProvider } from "@ant-design/happy-work-theme";
 
 const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
   onSuccess,
@@ -41,19 +42,21 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
 
   return (
     <>
-      <Button
-        size="large"
-        style={{
-          background: "#1677ff",
-          color: "#fff",
-          position: "relative",
-          left: "60%",
-          bottom: "10px",
-        }}
-        onClick={showModal}
-      >
-        Add New Category
-      </Button>
+      <HappyProvider>
+        <Button
+          size="large"
+          style={{
+            background: "#1677ff",
+            color: "#fff",
+            position: "relative",
+            left: "60%",
+            bottom: "10px",
+          }}
+          onClick={showModal}
+        >
+          Add New Category
+        </Button>
+      </HappyProvider>
       <Modal
         title="Add New Category"
         visible={isModalVisible}

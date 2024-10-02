@@ -17,7 +17,6 @@ const MainLayout = () => {
   const [selectedKey, setSelectedKey] = useState("");
 
   useEffect(() => {
-    // Find the active route and set the selected key based on the current path
     const currentRouteIndex = routes.findIndex(
       route => route.path === location.pathname
     );

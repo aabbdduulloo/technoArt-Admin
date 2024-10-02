@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { category } from "@service";
-import { Table, Search } from "@components";
+import { Table, Search, ConfirmDelete } from "@components";
 import { Button, Space, Tooltip } from "antd";
 import { EditOutlined, ArrowsAltOutlined } from "@ant-design/icons";
 import { CategoryCreate } from "@modals";
 import { CategoryUpdate } from "@modals";
-import { CategorDelete } from "@modals";
+import { notification } from "antd";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -68,6 +68,22 @@ const Index = () => {
     console.log(id);
     navigate(`/main/categories/${id}`);
   };
+
+  const handleDelete = async (id: any) => {
+    try {
+      await category.delete(id);
+      notification.success({
+        message: "Category deleted successfully",
+      });
+      getData();
+    } catch (error: any) {
+      notification.error({
+        message: "Failed to delete category",
+        description: error?.response?.data?.message || "Something went wrong",
+      });
+    }
+  };
+
   const columns = [
     {
       title: "№",
@@ -92,10 +108,7 @@ const Index = () => {
             />
           </Tooltip>
           <Tooltip title="Delete">
-            <CategorDelete
-              record={{ id: record.id, name: record.name }}
-              onSuccess={getData}
-            />
+            <ConfirmDelete id={record.id} deleteItem={handleDelete} />
           </Tooltip>
           <Tooltip title="View">
             <Button

@@ -13,7 +13,7 @@ interface SearchProps {
 const Index = (props: SearchProps) => {
   const { params, setParams } = props;
   const navigate = useNavigate();
-  const location = useLocation(); // To get current query parameters
+  const location = useLocation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchValue = e.target.value;
@@ -31,7 +31,7 @@ const Index = (props: SearchProps) => {
 
   return (
     <Input
-      placeholder="Search Category"
+      placeholder="Search ..."
       value={params.search}
       onChange={handleChange}
       style={{ width: "300px", position: "relative", bottom: "10px" }}

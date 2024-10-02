@@ -1,23 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { subcategory, category } from "@service";
 import { SubCategoryCreate } from "@modals";
-import { Table, Search } from "@components";
+import { Table, Search, ConfirmDelete } from "@components";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { SubCategoryDelete } from "@modals";
 import { SubCategoryUpdate } from "@modals";
-import { Button, Space, Tooltip } from "antd";
+import { Button, notification, Space, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const Index = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [selectedCategorySingle, setSelectedCategorySingle] = useState<{
     id: string;
     name: string;
   } | null>(null);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const val = new URLSearchParams(location.search);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -32,15 +31,32 @@ const Index = () => {
     setSelectedCategorySingle({ id, name });
     setIsUpdateModalVisible(true);
   };
+
   const handleModalClose = () => {
     setIsUpdateModalVisible(false);
     setSelectedCategorySingle(null);
   };
+
+  const handleDelete = async (id: any) => {
+    try {
+      await subcategory.delete_subcategory(id);
+      notification.success({
+        message: "Single Category deleted successfully",
+      });
+      getData();
+    } catch (err: any) {
+      notification.error({
+        message: "Error deleting category",
+        description: err.message,
+      });
+    }
+  };
+
   const getCategories = async () => {
     try {
       const response = await category.get(params);
       if (response.status === 200) {
-        setCategories(response?.data?.data?.categories);
+        setCategories(response?.data?.data?.categories || []);
       }
     } catch (err: any) {
       console.log(err);
@@ -51,8 +67,8 @@ const Index = () => {
     try {
       const response = await subcategory.get_subcategory(id, params);
       if (response.status === 200) {
-        setData(response?.data?.data?.subcategories);
-        setTotal(response?.data?.data?.count);
+        setData(response?.data?.data?.subcategories || []);
+        setTotal(response?.data?.data?.count || 0);
       }
     } catch (err: any) {
       console.log(err);
@@ -99,10 +115,7 @@ const Index = () => {
             />
           </Tooltip>
           <Tooltip title="Delete">
-            <SubCategoryDelete
-              record={{ id: record.id, name: record.name }}
-              onSuccess={getData}
-            />
+            <ConfirmDelete id={record.id} deleteItem={handleDelete} />
           </Tooltip>
         </Space>
       ),
@@ -125,7 +138,7 @@ const Index = () => {
   return (
     <div>
       <Search params={params} setParams={setParams} />
-      <SubCategoryCreate data={data} setData={setData} />{" "}
+      <SubCategoryCreate data={data} setData={setData} />
       <Table
         data={data}
         columns={columns}

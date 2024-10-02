@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { brand } from "@service";
-import { Table, Search } from "@components";
-import { Button, Space, Tooltip } from "antd";
+import { Table, Search, ConfirmDelete } from "@components";
+import { Button, notification, Space, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { BrandCreate } from "@modals";
 import { BrandUpdate } from "@modals";
-import { BrandDelete } from "@modals";
 
 const Index = () => {
   const [data, setData] = useState([]);
@@ -72,6 +71,21 @@ const Index = () => {
     setSelectedBrand(null);
   };
 
+  const handleDelete = async (id: any) => {
+    try {
+      await brand.delete(id);
+      notification.success({
+        message: "Category deleted successfully",
+      });
+      getData();
+    } catch (error: any) {
+      notification.error({
+        message: "Failed to delete category",
+        description: error?.response?.data?.message || "Something went wrong",
+      });
+    }
+  };
+
   const columns = [
     {
       title: "№",
@@ -103,10 +117,7 @@ const Index = () => {
             />
           </Tooltip>
           <Tooltip title="Delete">
-            <BrandDelete
-              record={{ id: record.id, name: record.name }}
-              onSuccess={getData}
-            />
+            <ConfirmDelete id={record.id} deleteItem={handleDelete} />
           </Tooltip>
         </Space>
       ),

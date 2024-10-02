@@ -8,5 +8,8 @@ const brandcategory: BrandCategory = {
   update_brand_category: (id, data) =>
     https.patch(`/brand-category/update/${id}`, data),
   delete_brand_category: id => https.delete(`/brand-category/delete/${id}`),
+  delete: function (): unknown {
+    throw new Error("Function not implemented.");
+  },
 };
 export default brandcategory;

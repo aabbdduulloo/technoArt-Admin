@@ -2,6 +2,9 @@ import {
   AppstoreOutlined,
   TagsOutlined,
   ShopOutlined,
+  SettingOutlined,
+  RadiusSettingOutlined,
+  BorderTopOutlined,
 } from "@ant-design/icons";
 
 const routes = [
@@ -23,12 +26,17 @@ const routes = [
   {
     title: "Brand Category",
     path: "/main/brand-category",
-    icon: <ShopOutlined />,
+    icon: <BorderTopOutlined />,
   },
   {
     title: "Ads",
     path: "/main/ads",
-    icon: <ShopOutlined />,
+    icon: <RadiusSettingOutlined />,
+  },
+  {
+    title: "Settings",
+    path: "/main/settings",
+    icon: <SettingOutlined />,
   },
 ];
 
