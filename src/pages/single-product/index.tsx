@@ -2,20 +2,20 @@
 import { product } from "@service";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ImageGallery from "react-image-gallery";
 import { ProductDetail } from "@modals";
+import { Tooltip } from "antd";
 
 const Index = () => {
-  const [, setProduct]: any = useState([]);
-  const [detail, setDetail]: any = useState({});
-  const { id }: any = useParams();
+  const [productData, setProductData] = useState<any>(null); // Product data
+  const [detail, setDetail] = useState<any>({}); // Product detail
+  const { id } = useParams<{ id: any }>(); // Params to get product ID
 
   const getProductData = async () => {
     try {
       const response = await product.get_product_by_id(id);
       if (response.status === 200) {
         setDetail(response?.data?.data?.product_detail || {});
-        setProduct(response.data.data.product);
+        setProductData(response.data.data.product); // Corrected product state
       }
     } catch (err: any) {
       console.log(err);
@@ -28,95 +28,78 @@ const Index = () => {
 
   return (
     <>
-      {Object.keys(detail).length === 0 ? (
-        <div className="flex flex-col gap-y-3">
-          <div className="flex items-center gap-4">
-            <p className="text-[20px]">Product name:</p>
-            <p className="text-[20px] font-medium text-[#D55200]">
-              {product?.name}
+      {Object.keys(detail).length === 0 ? ( // Checking if detail is empty
+        <div className="flex flex-col gap-[15px]">
+          <div className="flex items-center gap-[20px]">
+            <h2 className="text-[24px] font-semibold">Product name:</h2>
+            <p className="text-[24px] font-semibold text-[#d55200]">
+              {productData?.name || "N/A"} {/* Safeguard for undefined */}
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <p className="text-[20px]">Product price:</p>
-            <p className="text-[20px] font-medium text-[#D55200]">
-              {product?.price} $
+
+          <div className="flex items-center gap-[20px]">
+            <h2 className="text-[24px] font-semibold">Product Price:</h2>
+            <p className="text-[24px] font-semibold text-[#d55200]">
+              {productData?.price || "N/A"} {/* Safeguard for undefined */}
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <p className="text-[20px]">Product detail:</p>
-            <ProductDetail />
+          <div className="flex items-center gap-[20px]">
+            <h2 className="text-[24px] font-semibold">Product detail</h2>
+            <Tooltip title="Add Product Detail">
+              <ProductDetail />
+            </Tooltip>
           </div>
         </div>
       ) : (
-        <div className="w-full flex flex-col lg:flex-row justify-between">
-          <div className="w-full lg:w-[45%] mb-5 lg:mb-0">
-            {detail?.images && (
-              <ImageGallery
-                autoPlay={false}
-                infinite={true}
-                thumbnailPosition={"left"}
-                showPlayButton={false}
-                showFullscreenButton={true}
-                items={detail?.images?.map((image: any) => {
-                  return {
-                    original: image,
-                    thumbnail: image,
-                  };
-                })}
-              />
-            )}
+        <div className="flex h-[85vh]">
+          <div className="w-[50%] bg-sky-100">
+            <img src={productData?.images || ""} alt={productData?.name} />
           </div>
-          <div className="w-full lg:w-[45%] px-3">
-            <h1 className="font-medium text-[24px] text-center mb-5">
-              {product?.name}
-            </h1>
-            <div className="flex flex-col gap-y-3">
-              <div className="flex gap-3">
-                <p className="font-medium text-[18px]">Description:</p>
-                <p className="text-[16px]">{detail?.description}</p>
+          <div className="w-[50%] flex justify-center pt-[100px]">
+            <div className="flex flex-col gap-[20px] w-[100%] px-[100px]">
+              <div className="w-[100%] flex justify-center pb-[30px] px-[20px] ">
+                <h1 className="text-[25px] font-semibold">
+                  {productData?.name || "N/A"}
+                </h1>
               </div>
-              <div className="flex gap-3 justify-between border-b">
-                <p className="font-medium text-[18px]">Product colors:</p>
-                <p className="text-[16px]">
-                  {detail?.colors?.map((color: any) => (
-                    <span key={color}>
-                      {color}
-                      {", "}
-                    </span>
-                  ))}
+              <div className="w-[100%] flex gap-[50px] justify-between items-center py-[5px] border-b-[1px] border-b-[lightgray]">
+                <h2 className="text-[20px] font-semibold">Description:</h2>
+                <p className="text-[17px] font-medium text-[gray]">
+                  {detail.description || "N/A"}
                 </p>
               </div>
-              <div className="flex gap-3 justify-between border-b">
-                <p className="font-medium text-[18px]">Product quantity:</p>
-                <p className="text-[16px]">{detail?.quantity}</p>
+              <div className="w-[100%] flex justify-between items-center py-[10px] border-b-[1px] border-b-[lightgray]">
+                <h2 className="text-[20px] font-semibold">Product color</h2>
+                <p className="text-[17px] font-medium">
+                  {detail.colors || "N/A"}
+                </p>
               </div>
-              <div className="flex gap-3 justify-between border-b">
-                <p className="font-medium text-[18px]">Product discount:</p>
-                <p className="text-[16px]">{detail?.discount}%</p>
+              <div className="w-[100%] flex justify-between items-center py-[10px] border-b-[1px] border-b-[lightgray]">
+                <h2 className="text-[20px] font-semibold">Product quantity</h2>
+                <p className="text-[17px] font-medium">
+                  {detail.quantity || "N/A"}
+                </p>
               </div>
-              <div className="flex gap-3 justify-between border-b items-end">
-                <p className="font-medium text-[18px]">Product price:</p>
-                <div>
-                  {detail?.discount ? (
-                    <>
-                      <del className="text-[16px] text-[#00000082]">
-                        {product?.price} $
-                      </del>
-                      <p className="text-[16px]">
-                        {Math.round(
-                          detail?.price -
-                            (detail?.price / 100) * detail?.discount
-                        )}{" "}
-                        $
-                      </p>
-                    </>
-                  ) : (
-                    <p className="text-[16px]">{product?.price} $</p>
-                  )}
-                </div>
+              <div className="w-[100%] flex justify-between items-center py-[10px] border-b-[1px] border-b-[lightgray]">
+                <h2 className="text-[20px] font-semibold">Product discount</h2>
+                <p className="text-[17px] font-medium">
+                  {detail.discount || 0}%
+                </p>
+              </div>
+              <div className="w-[100%] flex justify-between items-center py-[10px] border-b-[1px] border-b-[lightgray]">
+                <h2 className="text-[20px] font-semibold">Product price</h2>
+                <span className="flex items-center gap-[10px]">
+                  <p className="text-[gray]">
+                    <del>{productData?.price}$</del>
+                  </p>
+                  <p className="text-[17px] font-medium">
+                    {productData?.price -
+                      productData?.price * (detail.discount / 100)}
+                    $
+                  </p>
+                </span>
               </div>
             </div>
-            <div className="mt-10 flex gap-3"></div>
           </div>
         </div>
       )}

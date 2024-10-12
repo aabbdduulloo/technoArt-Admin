@@ -44,6 +44,7 @@ const MainLayout = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
+        width={210}
         trigger={null}
         collapsible
         collapsed={collapsed}

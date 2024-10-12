@@ -10,6 +10,7 @@ const product: Product = {
     https.patch(`/products/update/${id}`, data),
   price: undefined,
   name: undefined,
+  discount: 0,
 };
 
 export default product;

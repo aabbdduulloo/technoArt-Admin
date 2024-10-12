@@ -24,7 +24,6 @@ const MyModal: React.FC = () => {
     if (response?.status === 201) {
       setIsModalVisible(false);
       form.resetFields();
-      window.location.reload();
     }
     setLoading(false);
   };

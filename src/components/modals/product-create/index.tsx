@@ -150,15 +150,9 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
       <div onClick={fetchCategories}>
         {" "}
         <Button
+          type="primary"
           onClick={() => setIsModalVisible(true)}
           size="large"
-          style={{
-            background: "#1677ff",
-            color: "#fff",
-            position: "relative",
-            left: "1240px",
-            bottom: "25px",
-          }}
         >
           Add New Product
         </Button>

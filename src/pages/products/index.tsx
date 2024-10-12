@@ -129,8 +129,11 @@ const Index = () => {
 
   return (
     <div>
-      <Search params={params} setParams={setParams} />
-      <ProductCreate onSuccess={getData} />
+      <div className="flex justify-between items-center py-[20px]">
+        <Search params={params} setParams={setParams} />
+        <ProductCreate onSuccess={getData} />
+      </div>
+
       <Table
         data={data}
         columns={columns}

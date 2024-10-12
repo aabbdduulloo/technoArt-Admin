@@ -8,11 +8,15 @@ import Notification from "@notification";
 import type { FormProps } from "antd";
 import { HappyProvider } from "@ant-design/happy-work-theme";
 import { Button, Space } from "antd";
+import { SmileOutlined } from "@ant-design/icons";
 
 type FieldType = {
   phone_number: string | undefined;
   password: string | undefined;
 };
+const loadingIcon = (
+  <SmileOutlined style={{ fontSize: 24, color: "white" }} spin />
+);
 
 const Index = () => {
   const navigate = useNavigate();
@@ -32,7 +36,6 @@ const Index = () => {
           saveToken("access_token", access_token);
           saveToken("id", data?.data?.id);
           console.log(data.data.id, "id");
-
           navigate("/main/products");
         }
       } else {
@@ -131,7 +134,7 @@ const Index = () => {
                     }}
                     disabled={loading}
                   >
-                    {loading ? <Spin /> : "Login"}{" "}
+                    {loading ? <Spin indicator={loadingIcon} /> : "Login"}{" "}
                   </Button>
                 </HappyProvider>
               </Space>

@@ -70,6 +70,7 @@ export interface Ads {
 // ------------ Product ----------------
 
 export interface Product {
+  discount: number;
   price: ReactNode;
   name: ReactNode;
   get_products: (params: any) => any;

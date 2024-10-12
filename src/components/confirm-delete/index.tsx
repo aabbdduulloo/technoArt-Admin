@@ -21,7 +21,7 @@ const App: React.FC<AppProps> = ({ id, deleteItem }) => {
         cancelText="No"
         onConfirm={handleDelete}
       >
-        <Button icon={<DeleteOutlined />} danger />
+        <Button icon={<DeleteOutlined />} />
       </Popconfirm>
     </HappyProvider>
   );
