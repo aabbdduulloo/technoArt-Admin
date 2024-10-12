@@ -8,6 +8,8 @@ const product: Product = {
   delete_product: id => https.delete(`/products/delete/${id}`),
   update_product: (id: number, data: any) =>
     https.patch(`/products/update/${id}`, data),
+  price: undefined,
+  name: undefined,
 };
 
 export default product;
