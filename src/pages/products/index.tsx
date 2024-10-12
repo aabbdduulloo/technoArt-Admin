@@ -152,8 +152,11 @@ const Index = () => {
             getData();
             handleModalClose();
           }}
-          categoryId={selectedCategory.id}
+          // categoryId={selectedCategory.id}
           initialName={selectedCategory.name}
+          brandId={undefined}
+          initialDescription={""}
+          initialCategoryId={0}
         />
       )}
     </div>

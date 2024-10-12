@@ -53,6 +53,7 @@ const Index = () => {
     >
       {/* Chap tomondagi rasm */}
       <div
+        className="hidden md:block" // Kichik ekranlarda yashirish va katta ekranlarda ko'rsatish
         style={{
           width: "50%",
           height: "100%",
@@ -65,21 +66,13 @@ const Index = () => {
       ></div>
 
       {/* O'ng tomondagi kontent */}
-      <div
-        style={{
-          width: "50%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div className="w-full md:w-1/2 flex justify-center items-center px-4 md:px-0">
         <div
           style={{
-            width: "500px",
-            backgroundColor: "#fff",
+            width: "100%",
+            maxWidth: "500px",
             padding: "40px",
             borderRadius: "8px",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
           }}
         >
           <h1
@@ -130,11 +123,8 @@ const Index = () => {
                     htmlType="submit"
                     className="w-full"
                     style={{
-                      position: "relative",
-                      left: "27px",
                       backgroundColor: "#FF5722",
                       borderColor: "#FF5722",
-                      width: "400px",
                     }}
                     disabled={loading}
                   >

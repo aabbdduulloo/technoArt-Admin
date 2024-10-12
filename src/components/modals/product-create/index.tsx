@@ -156,8 +156,8 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
             background: "#1677ff",
             color: "#fff",
             position: "relative",
-            left: "364px",
-            bottom: "10px",
+            left: "1240px",
+            bottom: "25px",
           }}
         >
           Add New Product
@@ -169,6 +169,7 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         onClose={handleCancel}
         open={isModalVisible}
         title="Add New Product"
+        loading={loading}
       >
         <Form form={form} onFinish={handleSubmit} layout="vertical">
           <div className="grid grid-cols-2 gap-x-5">

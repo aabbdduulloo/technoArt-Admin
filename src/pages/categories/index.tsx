@@ -123,35 +123,37 @@ const Index = () => {
   ];
 
   return (
-    <div>
+    <>
       <Search params={params} setParams={setParams} />
-      <CategoryCreate onSuccess={getData} />
-      <Table
-        data={data}
-        columns={columns}
-        pagination={{
-          current: params.page,
-          pageSize: params.limit,
-          total: total,
-          showSizeChanger: true,
-          pageSizeOptions: ["2", "5", "7", "10"],
-        }}
-        onChange={handleTableChange}
-      />
-
-      {selectedCategory && (
-        <CategoryUpdate
-          visible={isUpdateModalVisible}
-          onClose={handleModalClose}
-          onSuccess={() => {
-            getData();
-            handleModalClose();
+      <div>
+        <CategoryCreate onSuccess={getData} />
+        <Table
+          data={data}
+          columns={columns}
+          pagination={{
+            current: params.page,
+            pageSize: params.limit,
+            total: total,
+            showSizeChanger: true,
+            pageSizeOptions: ["2", "5", "7", "10"],
           }}
-          categoryId={selectedCategory.id}
-          initialName={selectedCategory.name}
+          onChange={handleTableChange}
         />
-      )}
-    </div>
+
+        {selectedCategory && (
+          <CategoryUpdate
+            visible={isUpdateModalVisible}
+            onClose={handleModalClose}
+            onSuccess={() => {
+              getData();
+              handleModalClose();
+            }}
+            categoryId={selectedCategory.id}
+            initialName={selectedCategory.name}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

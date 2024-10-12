@@ -87,7 +87,7 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
             background: "#1677ff",
             color: "#fff",
             position: "relative",
-            left: "364px",
+            left: "1245px",
             bottom: "10px",
           }}
         >

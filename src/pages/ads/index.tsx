@@ -163,6 +163,7 @@ const Index = () => {
             handleModalClose();
           }}
           initialName={selectedCategory.name}
+          adsId={0}
         />
       )}
     </div>

@@ -8,6 +8,7 @@ import BrandCategory from "./brand-category/index";
 import SingleCategory from "./single-category/index";
 import SingleProduct from "./single-product/index";
 import Ads from "./ads";
+import Stock from "./stock";
 import Settings from "./settings";
 export {
   SignIn,
@@ -20,5 +21,6 @@ export {
   SingleCategory,
   SingleProduct,
   Ads,
+  Stock,
   Settings,
 };

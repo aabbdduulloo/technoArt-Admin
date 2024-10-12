@@ -34,7 +34,7 @@ const Index = (props: SearchProps) => {
       placeholder="Search ..."
       value={params.search}
       onChange={handleChange}
-      style={{ width: "300px", position: "relative", bottom: "10px" }}
+      style={{ width: "300px" }}
     />
   );
 };

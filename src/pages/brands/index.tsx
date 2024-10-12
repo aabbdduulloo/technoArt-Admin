@@ -125,37 +125,40 @@ const Index = () => {
   ];
 
   return (
-    <div>
+    <>
+      {" "}
       <Search params={params} setParams={setParams} />
-      <BrandCreate onSuccess={getData} />
-      <Table
-        data={data}
-        columns={columns}
-        pagination={{
-          current: params.page,
-          pageSize: params.limit,
-          total: total,
-          showSizeChanger: true,
-          pageSizeOptions: ["2", "5", "7", "10"],
-        }}
-        onChange={handleTableChange}
-      />
-
-      {selectedBrand && (
-        <BrandUpdate
-          visible={isUpdateModalVisible}
-          onClose={handleModalClose}
-          onSuccess={() => {
-            getData();
-            handleModalClose();
+      <div>
+        <BrandCreate onSuccess={getData} />
+        <Table
+          data={data}
+          columns={columns}
+          pagination={{
+            current: params.page,
+            pageSize: params.limit,
+            total: total,
+            showSizeChanger: true,
+            pageSizeOptions: ["2", "5", "7", "10"],
           }}
-          brandId={selectedBrand.id}
-          initialName={selectedBrand.name}
-          initialDescription={selectedBrand.description}
-          initialCategoryId={selectedBrand.categoryId}
+          onChange={handleTableChange}
         />
-      )}
-    </div>
+
+        {selectedBrand && (
+          <BrandUpdate
+            visible={isUpdateModalVisible}
+            onClose={handleModalClose}
+            onSuccess={() => {
+              getData();
+              handleModalClose();
+            }}
+            brandId={selectedBrand.id}
+            initialName={selectedBrand.name}
+            initialDescription={selectedBrand.description}
+            initialCategoryId={selectedBrand.categoryId}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

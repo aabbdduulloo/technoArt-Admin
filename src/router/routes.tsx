@@ -5,6 +5,7 @@ import {
   SettingOutlined,
   RadiusSettingOutlined,
   BorderTopOutlined,
+  StockOutlined,
 } from "@ant-design/icons";
 
 const routes = [
@@ -32,6 +33,11 @@ const routes = [
     title: "Ads",
     path: "/main/ads",
     icon: <RadiusSettingOutlined />,
+  },
+  {
+    title: "Stock",
+    path: "/main/stock",
+    icon: <StockOutlined />,
   },
   {
     title: "Settings",

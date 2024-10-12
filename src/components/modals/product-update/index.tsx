@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Modal, notification, Select } from "antd";
-import { brand, category, brandcategory, product } from "@service";
+import { category, brandcategory, product } from "@service";
 
 const UpdateBrandModal: React.FC<{
   visible: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  brandId: string;
+  brandId: any;
   initialName: string;
   initialDescription: string;
   initialCategoryId: number;
@@ -22,7 +22,7 @@ const UpdateBrandModal: React.FC<{
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [form] = Form.useForm();
-  const [brandCategoryLoading, setBrandCategoryLoading] = useState(false);
+  const [, setBrandCategoryLoading] = useState(false);
 
   useEffect(() => {
     if (visible) {
@@ -56,7 +56,7 @@ const UpdateBrandModal: React.FC<{
     setBrandCategoryLoading(true);
     const response = await brandcategory.get_brand_category_by_brand(id);
     if (response?.status === 200) {
-      setbrandCategories(
+      setCategories(
         response.data.data.brandCategories.map((item: any) => ({
           label: item.name,
           value: item.id,

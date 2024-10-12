@@ -74,8 +74,8 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
             background: "#1677ff",
             color: "#fff",
             position: "relative",
-            left: "364px",
-            bottom: "10px",
+            left: "1168px",
+            bottom: "25px",
           }}
         >
           Add New Brand Category

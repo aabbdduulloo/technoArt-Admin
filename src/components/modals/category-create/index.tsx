@@ -49,8 +49,8 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
             background: "#1677ff",
             color: "#fff",
             position: "relative",
-            left: "60%",
-            bottom: "10px",
+            left: "1230px",
+            bottom: "25px",
           }}
           onClick={showModal}
         >

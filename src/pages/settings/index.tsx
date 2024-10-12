@@ -6,7 +6,6 @@ import { getToken, removeToken } from "@token-service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UpdateAccount, DeletAccount } from "@modals";
-import LeftImg from "../../assets/login-bg-CeJ_7tXc.svg";
 
 const Index = () => {
   const id: any = getToken("admin_id");
@@ -36,37 +35,17 @@ const Index = () => {
 
   return (
     <>
-      <div
-        style={{ display: "flex", height: "100vh", backgroundColor: "#F8F9FD" }}
-      >
-        <div
-          style={{
-            width: "50%",
-            height: "80%",
-            position: "relative",
-            top: "10px",
-            left: "10px",
-            backgroundImage: `url(${LeftImg})`,
-            backgroundSize: "50%",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundColor: "#fff",
-            borderRadius: "12px",
-          }}
-        ></div>
+      <div className="flex justify-center">
         <Space direction="vertical">
           <Card
-            bordered={true} // Card ni chegarasini belgilash
-            className="shadow-lg p-8 rounded-lg"
+            bordered={true}
             style={{
               position: "relative",
               top: "10px",
               left: "25px",
-              width: "130%",
-              height: "113%",
-              maxWidth: "1450px",
+              height: "100%",
               borderRadius: "12px",
-              backgroundColor: "#fff", // Card fon rangi
+              backgroundColor: "#fff",
             }}
           >
             <div className="flex flex-col lg:flex-row lg:gap-12 gap-8 items-center lg:items-start">
@@ -76,12 +55,11 @@ const Index = () => {
                 className="rounded-full shadow-lg"
                 style={{ width: "250px", height: "250px", objectFit: "cover" }}
               />
-              <div className="grid grid-cols-2 gap-y-6 gap-x-12 w-full bg-gray-50 p-6 rounded-lg">
-                {" "}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-12 w-full bg-gray-50 p-6 rounded-lg">
                 {/* Content foni va padding */}
                 <div>
                   <p className="text-gray-500 text-md">First Name</p>
-                  <p className="font-bold text-xl text-red-800">
+                  <p className="font-bold text-xl text-gray-800">
                     {admin?.first_name || "N/A"}
                   </p>
                 </div>
@@ -103,18 +81,17 @@ const Index = () => {
                     {admin?.phone_number || "N/A"}
                   </p>
                 </div>
-                <div className="col-span-2 flex justify-center lg:justify-start gap-4 mt-6">
+                <div className="col-span-full flex flex-col lg:flex-row justify-center lg:justify-start gap-3 mt-6">
                   <Button
                     size="large"
                     onClick={createAccount}
                     type="primary"
+                    className="w-full lg:w-auto" // Telefon ekranida to'liq kenglikni egallaydi
                     style={{
-                      position: "relative",
-                      right: "10px",
                       backgroundColor: "#52c41a",
                       borderColor: "#52c41a",
                       color: "#fff",
-                      fontWeight: "bold",
+                      fontWeight: "inherit",
                       padding: "10px 20px",
                     }}
                   >

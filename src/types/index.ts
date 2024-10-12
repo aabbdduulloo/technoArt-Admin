@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 // ========= GLOBAL ========
 interface IParams {
   limit: number;
@@ -75,4 +77,21 @@ export interface Product {
   create_product: (data: Product) => any;
   delete_product: (id: number) => any;
   update_product: (id: number, data: any) => any;
+}
+
+// ------------ Product detail ----------------
+
+export interface ProductDetailRequest {
+  create_product_detail: (data: any) => any;
+  delete_product_detail: (id: number) => any;
+  update_product_detail: (id: number, data: any) => any;
+}
+
+// ------------ Stock ----------------
+export interface StockRequest {
+  get_stocks: (params: any) => any;
+  get_stock_by_brand: (id: any) => any;
+  create_stock: (data: any) => any;
+  delete_stock: (id: number) => any;
+  update_stock: (id: number, data: any) => any;
 }

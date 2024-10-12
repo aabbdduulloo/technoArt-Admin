@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { brandcategory } from "@service";
+import { stock } from "@service";
 import { Table, Search, ConfirmDelete } from "@components";
-import { Button, notification, Space, Tooltip } from "antd";
+import { Button, Space, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import { BrandCategoryCreate } from "@modals";
-import { BrandCategoryUpdate } from "@modals";
+import { StockCreate } from "@modals";
+import { CategoryUpdate } from "@modals";
+import { notification } from "antd";
 
 const Index = () => {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
-  const [selectedBrand, setSelectedBrand] = useState<{
-    description: string;
+  const [selectedCategory, setSelectedCategory] = useState<{
     id: string;
     name: string;
-    categoryId: number;
   } | null>(null);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const location = useLocation();
@@ -28,9 +27,9 @@ const Index = () => {
 
   const getData = async () => {
     try {
-      const response = await brandcategory.get_brand_category(params);
+      const response = await stock.get_stocks(params);
       if (response.status === 200) {
-        setData(response?.data?.data?.brandCategories);
+        setData(response?.data?.data?.stocks);
         setTotal(response?.data?.data?.count);
       }
     } catch (err: any) {
@@ -56,24 +55,19 @@ const Index = () => {
     navigate(`?${searchParams}`);
   };
 
-  const handleEditClick = (
-    id: string,
-    name: string,
-    description: string,
-    categoryId: any
-  ) => {
-    setSelectedBrand({ id, name, description, categoryId });
+  const handleEditClick = (id: string, name: string) => {
+    setSelectedCategory({ id, name });
     setIsUpdateModalVisible(true);
   };
 
   const handleModalClose = () => {
     setIsUpdateModalVisible(false);
-    setSelectedBrand(null);
+    setSelectedCategory(null);
   };
 
   const handleDelete = async (id: any) => {
     try {
-      await brandcategory.delete_brand_category(id);
+      await stock.delete_stock(id);
       notification.success({
         message: "Category deleted successfully",
       });
@@ -106,23 +100,11 @@ const Index = () => {
             <Button
               type="default"
               icon={<EditOutlined />}
-              onClick={() =>
-                handleEditClick(
-                  record.id,
-                  record.name,
-                  record.description,
-                  record.categoryId
-                )
-              }
+              onClick={() => handleEditClick(record.id, record.name)}
             />
           </Tooltip>
           <Tooltip title="Delete">
-            <ConfirmDelete
-              id={record.id}
-              deleteItem={handleDelete}
-              // record={{ id: record.id, name: record.name }}
-              // onSuccess={getData}
-            />
+            <ConfirmDelete id={record.id} deleteItem={handleDelete} />
           </Tooltip>
         </Space>
       ),
@@ -131,10 +113,9 @@ const Index = () => {
 
   return (
     <>
-      {" "}
       <Search params={params} setParams={setParams} />
       <div>
-        <BrandCategoryCreate onSuccess={getData} />
+        <StockCreate onSuccess={getData} />
         <Table
           data={data}
           columns={columns}
@@ -148,17 +129,16 @@ const Index = () => {
           onChange={handleTableChange}
         />
 
-        {selectedBrand && (
-          <BrandCategoryUpdate
+        {selectedCategory && (
+          <CategoryUpdate
             visible={isUpdateModalVisible}
             onClose={handleModalClose}
             onSuccess={() => {
               getData();
               handleModalClose();
             }}
-            brandId={selectedBrand.id}
-            initialName={selectedBrand.name}
-            initialCategoryId={selectedBrand.categoryId}
+            categoryId={selectedCategory.id}
+            initialName={selectedCategory.name}
           />
         )}
       </div>
