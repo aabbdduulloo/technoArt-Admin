@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { UpdateAccount, DeletAccount } from "@modals";
 
 const Index = () => {
-  const id: any = getToken("admin_id");
+  const id: any = getToken("id");
   const [admin, setAdmin] = useState<any>(null);
   const navigate = useNavigate();
 

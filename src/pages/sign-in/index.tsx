@@ -30,6 +30,9 @@ const Index = () => {
             tokens: { access_token },
           } = data;
           saveToken("access_token", access_token);
+          saveToken("id", data?.data?.id);
+          console.log(data.data.id, "id");
+
           navigate("/main/products");
         }
       } else {
