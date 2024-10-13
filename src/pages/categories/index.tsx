@@ -124,35 +124,35 @@ const Index = () => {
 
   return (
     <>
-      <Search params={params} setParams={setParams} />
-      <div>
+      <div className="flex justify-between items-center py-[20px]">
+        <Search params={params} setParams={setParams} />
         <CategoryCreate onSuccess={getData} />
-        <Table
-          data={data}
-          columns={columns}
-          pagination={{
-            current: params.page,
-            pageSize: params.limit,
-            total: total,
-            showSizeChanger: true,
-            pageSizeOptions: ["2", "5", "7", "10"],
-          }}
-          onChange={handleTableChange}
-        />
-
-        {selectedCategory && (
-          <CategoryUpdate
-            visible={isUpdateModalVisible}
-            onClose={handleModalClose}
-            onSuccess={() => {
-              getData();
-              handleModalClose();
-            }}
-            categoryId={selectedCategory.id}
-            initialName={selectedCategory.name}
-          />
-        )}
       </div>
+      <Table
+        data={data}
+        columns={columns}
+        pagination={{
+          current: params.page,
+          pageSize: params.limit,
+          total: total,
+          showSizeChanger: true,
+          pageSizeOptions: ["2", "5", "7", "10"],
+        }}
+        onChange={handleTableChange}
+      />
+
+      {selectedCategory && (
+        <CategoryUpdate
+          visible={isUpdateModalVisible}
+          onClose={handleModalClose}
+          onSuccess={() => {
+            getData();
+            handleModalClose();
+          }}
+          categoryId={selectedCategory.id}
+          initialName={selectedCategory.name}
+        />
+      )}
     </>
   );
 };

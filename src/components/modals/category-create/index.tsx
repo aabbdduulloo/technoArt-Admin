@@ -43,17 +43,7 @@ const AddCategoryModal: React.FC<{ onSuccess: () => void }> = ({
   return (
     <>
       <HappyProvider>
-        <Button
-          size="large"
-          style={{
-            background: "#1677ff",
-            color: "#fff",
-            position: "relative",
-            left: "1230px",
-            bottom: "25px",
-          }}
-          onClick={showModal}
-        >
+        <Button size="large" type="primary" onClick={showModal}>
           Add New Category
         </Button>
       </HappyProvider>

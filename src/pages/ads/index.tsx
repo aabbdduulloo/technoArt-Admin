@@ -139,34 +139,39 @@ const Index = () => {
   ];
 
   return (
-    <div>
-      <AdsCreate onSuccess={getData} />
-      <Table
-        data={data}
-        columns={columns}
-        pagination={{
-          current: params.page,
-          pageSize: params.limit,
-          total: total,
-          showSizeChanger: true,
-          pageSizeOptions: ["2", "5", "7", "10"],
-        }}
-        onChange={handleTableChange}
-      />
-
-      {selectedCategory && (
-        <AdsUpdate
-          visible={isUpdateModalVisible}
-          onClose={handleModalClose}
-          onSuccess={() => {
-            getData();
-            handleModalClose();
+    <>
+      <div className="flex justify-end items-center py-[20px]">
+        {" "}
+        <AdsCreate onSuccess={getData} />
+      </div>
+      <div>
+        <Table
+          data={data}
+          columns={columns}
+          pagination={{
+            current: params.page,
+            pageSize: params.limit,
+            total: total,
+            showSizeChanger: true,
+            pageSizeOptions: ["2", "5", "7", "10"],
           }}
-          initialName={selectedCategory.name}
-          adsId={0}
+          onChange={handleTableChange}
         />
-      )}
-    </div>
+
+        {selectedCategory && (
+          <AdsUpdate
+            visible={isUpdateModalVisible}
+            onClose={handleModalClose}
+            onSuccess={() => {
+              getData();
+              handleModalClose();
+            }}
+            initialName={selectedCategory.name}
+            adsId={0}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

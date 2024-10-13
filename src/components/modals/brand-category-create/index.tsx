@@ -70,13 +70,7 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         <Button
           onClick={() => setIsModalVisible(true)}
           size="large"
-          style={{
-            background: "#1677ff",
-            color: "#fff",
-            position: "relative",
-            left: "1168px",
-            bottom: "25px",
-          }}
+          type="primary"
         >
           Add New Brand Category
         </Button>

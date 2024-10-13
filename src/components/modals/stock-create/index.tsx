@@ -107,17 +107,7 @@ const AddBrandModal: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
     <>
       <div onClick={fetchCategories}>
         {" "}
-        <Button
-          onClick={clickButton}
-          size="large"
-          style={{
-            background: "#1677ff",
-            color: "#fff",
-            position: "relative",
-            left: "1255px",
-            bottom: "25px",
-          }}
-        >
+        <Button onClick={clickButton} size="large" type="primary">
           Add New Stock
         </Button>
       </div>

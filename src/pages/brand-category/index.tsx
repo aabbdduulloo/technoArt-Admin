@@ -131,10 +131,11 @@ const Index = () => {
 
   return (
     <>
-      {" "}
-      <Search params={params} setParams={setParams} />
-      <div>
+      <div className="flex justify-between items-center py-[20px]">
+        <Search params={params} setParams={setParams} />
         <BrandCategoryCreate onSuccess={getData} />
+      </div>
+      <div>
         <Table
           data={data}
           columns={columns}
